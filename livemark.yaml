@@ -1,0 +1,27 @@
+site:
+  title: Robert Miller
+  favicon: assets/sti.png
+# vai exibir o que está no campo 'text' na coluna direita da pagina como se fosse um cabeçalho
+about:
+  text: Estudos em frictionles
+# vai exibir o que está no campo 'text' na coluna esquerda da pagina como se fosse um cabeçalho
+brand:
+  text: livemark project
+# aqui adciona um atalho com iconezinho no github do na coluna direita da pagina
+github:
+  user: rmls2
+  repo: projeto-web-ic
+# topics:
+#   selector: h2
+links:
+  items:
+    - name: Frictionless
+      path: https://frictionlessdata.io
+    - name: Livemark
+      path: https://livemark.frictionlessdata.io
+    - name: YouTube
+      path: https://www.youtube.com/channel/UCWU7_JMo6WmDiVy-ffOl8bQ
+pages:
+    items:
+       - path: index
+       - path: pages/frictionless
