@@ -1778,7 +1778,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 <div id="livemark-main">
 <div id="livemark-notes">
       <a href="https://github.com/rmls2/projeto-web-ic/edit/main/./pages/frictionless.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-01-18 21:05)
+    (2023-01-19 19:47)
 </div>
 
 <h1>Frictionless</h1>
@@ -1796,7 +1796,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 
 <pre><code class="language-python">print('Data Transform')
 </code></pre>
-</div></div><h2>Frictionless - Describe</h2>
+</div></div><h2>Describe</h2>
 <p>Descrever os dados, se tratando de frictionless, significa criar metadados para seus arquivos de dados. Por si só, os arquivos de dados não possuem informações adicionais que ajudem a compreender os dados.</p>
 <p>Um arquivo no formato CSV sem os metadados carece de informações críticas como significado dos campos, tipos de dados, restrições, relações e etc...</p>
 <p>Descrevemos os dados utilizando a função describe()</p>
@@ -1819,6 +1819,138 @@ pprint(resource)
                        {'name': 'name', 'type': 'string'},
                        {'name': 'field3', 'type': 'integer'},
                        {'name': 'name2', 'type': 'integer'}]}}</code></pre>
+</div><h2>Extract</h2>
+<p>Após entendermos o formato do arquivo atraveś do esquema de tabela gerado pelo describe, podemos extraí-lo para ler o aquivo tabular normalizado do seu csv de origem.</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import extract
+
+rows = extract('data/invalid.csv')
+pprint(rows)
+</code></pre>
+
+<pre><code class="language-markup">[{'id': 1, 'name': 'english', 'field3': None, 'name2': None},
+ {'id': 1, 'name': 'english', 'field3': None, 'name2': None},
+ {'id': None, 'name': None, 'field3': None, 'name2': None},
+ {'id': 2, 'name': 'german', 'field3': 1, 'name2': 2}]</code></pre>
+</div><h2>Validation</h2>
+<p>A validação gerará pra nós um relatório com os erros presentes no nosso arquivo tabular. </p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+
+report = validate('data/invalid.csv')
+pprint(report.flatten(["rowPosition", "fieldPosition", "code"]))
+</code></pre>
+
+<pre><code class="language-markup">[[None, None, None],
+ [None, None, None],
+ [None, None, None],
+ [None, None, None],
+ [None, None, None],
+ [None, None, None],
+ [None, None, None],
+ [None, None, None]]</code></pre>
+</div><h2>Exemplo 1</h2>
+<p>vamos exibir um dataset sobre países da europa. Um dataset coletado que possui varios erros de campo..</p>
+<div><pre><code class="language-python">with open('data/countries.csv') as file:
+    print(file.read())
+</code></pre>
+
+<pre><code class="language-markup"># clean this data!
+id,neighbor_id,name,population
+1,Ireland,Britain,67
+2,3,France,n/a,find the population
+3,22,Germany,83
+4,,Italy,60
+5</code></pre>
+</div><h3>Describe</h3>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import describe
+
+resource = describe('data/countries.csv')
+pprint(resource)
+</code></pre>
+
+<pre><code class="language-markup">{'name': 'countries',
+ 'type': 'table',
+ 'path': 'data/countries.csv',
+ 'scheme': 'file',
+ 'format': 'csv',
+ 'encoding': 'utf-8',
+ 'mediatype': 'text/csv',
+ 'dialect': {'headerRows': [2]},
+ 'schema': {'fields': [{'name': 'id', 'type': 'integer'},
+                       {'name': 'neighbor_id', 'type': 'string'},
+                       {'name': 'name', 'type': 'string'},
+                       {'name': 'population', 'type': 'string'}]}}</code></pre>
+</div><h3>Update the metadata</h3>
+<div><pre><code class="language-python">from frictionless import Detector, describe
+
+detector = Detector(field_missing_values=["", "n/a"])
+resource = describe("data/countries.csv", detector=detector)
+resource.schema.get_field("neighbor_id").type = "integer"
+resource.schema.foreign_keys.append(
+    {"fields": ["neighbor_id"], "reference": {"resource": "", "fields": ["id"]}}
+)
+#resource.to_yaml("countries.resource.yaml")
+</code></pre>
+</div><h3>Abrindo o yaml com os metadados gerados</h3>
+<div><pre><code class="language-python">with open('data/countries.resource.yaml') as file:
+    print(file.read())
+</code></pre>
+
+<pre><code class="language-markup">name: countries
+type: table
+path: data/countries.csv
+scheme: file
+format: csv
+encoding: utf-8
+mediatype: text/csv
+dialect:
+  headerRows:
+    - 2
+schema:
+  fields:
+    - name: id
+      type: integer
+    - name: neighbor_id
+      type: integer
+    - name: name
+      type: string
+    - name: population
+      type: integer
+  missingValues:
+    - ''
+    - n/a
+  foreignKeys:
+    - fields:
+        - neighbor_id
+      reference:
+        resource: ''
+        fields:
+          - id</code></pre>
+</div><h3>Extract</h3>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import extract
+
+rows = extract('data/countries.csv')
+pprint(rows)
+</code></pre>
+
+<pre><code class="language-markup">[{'id': 1, 'neighbor_id': 'Ireland', 'name': 'Britain', 'population': '67'},
+ {'id': 2, 'neighbor_id': '3', 'name': 'France', 'population': 'n/a'},
+ {'id': 3, 'neighbor_id': '22', 'name': 'Germany', 'population': '83'},
+ {'id': 4, 'neighbor_id': None, 'name': 'Italy', 'population': '60'},
+ {'id': 5, 'neighbor_id': None, 'name': None, 'population': None}]</code></pre>
+</div><h3>Validate</h3>
+<p>validando os arquivo</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+
+report = validate('data/countries.resource.yaml')
+pprint(report.flatten(["rowPosition", "fieldPosition", "code"]))
+</code></pre>
+
+<pre><code class="language-markup">[[None, None, None]]</code></pre>
 </div>
 
 <div id="livemark-signs">
@@ -2188,7 +2320,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Frictionless',
           'path': 'pages/frictionless',
           'relpath': 'frictionless',
-          'text': "# Frictionless ## Exibindo um conjunto de dados bagun\u00e7ado ```python script with open(\u0027data/invalid.csv\u0027) as file: print(file.read()) ``` ```python task id=data-transform print(\u0027Data Transform\u0027) ``` ## Frictionless - Describe Descrever os dados, se tratando de frictionless, significa criar metadados para seus arquivos de dados. Por si s\u00f3, os arquivos de dados n\u00e3o possuem informa\u00e7\u00f5es adicionais que ajudem a compreender os dados. Um arquivo no formato CSV sem os metadados carece de informa\u00e7\u00f5es cr\u00edticas como significado dos campos, tipos de dados, restri\u00e7\u00f5es, rela\u00e7\u00f5es e etc... Descrevemos os dados utilizando a fun\u00e7\u00e3o describe() O trecho abaixo descreve o arquivo \"invalid.csv\" ```python script from pprint import pprint from frictionless import describe resource = describe(\u0027data/invalid.csv\u0027) pprint(resource) ```",
+          'text': "# Frictionless ## Exibindo um conjunto de dados bagun\u00e7ado ```python script with open(\u0027data/invalid.csv\u0027) as file: print(file.read()) ``` ```python task id=data-transform print(\u0027Data Transform\u0027) ``` ## Describe Descrever os dados, se tratando de frictionless, significa criar metadados para seus arquivos de dados. Por si s\u00f3, os arquivos de dados n\u00e3o possuem informa\u00e7\u00f5es adicionais que ajudem a compreender os dados. Um arquivo no formato CSV sem os metadados carece de informa\u00e7\u00f5es cr\u00edticas como significado dos campos, tipos de dados, restri\u00e7\u00f5es, rela\u00e7\u00f5es e etc... Descrevemos os dados utilizando a fun\u00e7\u00e3o describe() O trecho abaixo descreve o arquivo \"invalid.csv\" ```python script from pprint import pprint from frictionless import describe resource = describe(\u0027data/invalid.csv\u0027) pprint(resource) ``` ## Extract Ap\u00f3s entendermos o formato do arquivo atrave\u015b do esquema de tabela gerado pelo describe, podemos extra\u00ed-lo para ler o aquivo tabular normalizado do seu csv de origem. ``` python script from pprint import pprint from frictionless import extract rows = extract(\u0027data/invalid.csv\u0027) pprint(rows) ``` ## Validation A valida\u00e7\u00e3o gerar\u00e1 pra n\u00f3s um relat\u00f3rio com os erros presentes no nosso arquivo tabular. ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/invalid.csv\u0027) pprint(report.flatten([\"rowPosition\", \"fieldPosition\", \"code\"])) ``` ## Exemplo 1 vamos exibir um dataset sobre pa\u00edses da europa. Um dataset coletado que possui varios erros de campo.. ```python script with open(\u0027data/countries.csv\u0027) as file: print(file.read()) ``` ### Describe ```python script from pprint import pprint from frictionless import describe resource = describe(\u0027data/countries.csv\u0027) pprint(resource) ``` ### Update the metadata ```python script from frictionless import Detector, describe detector = Detector(field_missing_values=[\"\", \"n/a\"]) resource = describe(\"data/countries.csv\", detector=detector) resource.schema.get_field(\"neighbor_id\").type = \"integer\" resource.schema.foreign_keys.append( {\"fields\": [\"neighbor_id\"], \"reference\": {\"resource\": \"\", \"fields\": [\"id\"]}} ) #resource.to_yaml(\"countries.resource.yaml\") ``` ### Abrindo o yaml com os metadados gerados ```python script with open(\u0027data/countries.resource.yaml\u0027) as file: print(file.read()) ``` ### Extract ```python script from pprint import pprint from frictionless import extract rows = extract(\u0027data/countries.csv\u0027) pprint(rows) ``` ### Validate ```python task from pprint import pprint from frictionless import validate report = validate(\u0027data/countries.resource.yaml\u0027) pprint(report.flatten([\"rowPosition\", \"fieldPosition\", \"code\"])) ```",
       },
       };
   const searchIndex = lunr(function () {
