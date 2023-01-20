@@ -40,6 +40,7 @@ from frictionless import extract
 rows = extract('data/invalid.csv')
 pprint(rows)
 ```
+
 ## Validation
 
 A validação gerará pra nós um relatório com os erros presentes no nosso arquivo tabular. 
@@ -62,7 +63,7 @@ vamos exibir um dataset sobre países da europa. Um dataset coletado que possui 
 with open('data/countries.csv') as file:
     print(file.read())
 ```
-### Describe
+### Describe exemplo 1
 
 ```python script
 from pprint import pprint
@@ -72,7 +73,7 @@ resource = describe('data/countries.csv')
 pprint(resource)
 ```
 
-### Update the metadata
+### Update the metadata (exemplo 1)
 ```python script
 from frictionless import Detector, describe
 
@@ -82,16 +83,17 @@ resource.schema.get_field("neighbor_id").type = "integer"
 resource.schema.foreign_keys.append(
     {"fields": ["neighbor_id"], "reference": {"resource": "", "fields": ["id"]}}
 )
-#resource.to_yaml("countries.resource.yaml")
+resource.path = "countries.csv"
+resource.to_yaml("data/countries.resource.yaml")
 ```
 
-### Abrindo o yaml com os metadados gerados
+### Abrindo o yaml com os metadados gerados (exemplo 1)
 ```python script
 with open('data/countries.resource.yaml') as file:
     print(file.read())
 ```
 
-### Extract 
+### Extract exemplo 1
 
 ```python script
 from pprint import pprint
@@ -100,9 +102,26 @@ from frictionless import extract
 rows = extract('data/countries.csv')
 pprint(rows)
 ```
-### Validate
 
-validando os arquivo
+```python script
+from pprint import pprint
+from frictionless import extract
+
+rows = extract('data/countries.resource.yaml')
+pprint(rows)
+```
+
+### Validate exemplo 1
+
+validando o arquivo csv.
+
+```python script
+from pprint import pprint
+from frictionless import validate
+
+report = validate('data/countries.csv')
+pprint(report.flatten(["rowPosition", "fieldPosition", "code"]))
+```
 
 ```python script
 from pprint import pprint

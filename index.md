@@ -28,6 +28,16 @@ Data Transform
 Data Load
 ```
 
+## Validation
+
+```python script
+from pprint import pprint
+from frictionless import validate
+
+report = validate('invalid.csv')
+pprint(report.flatten(["rowPosition", "fieldPosition", "code"]))
+```
+
 ```yaml table
 data: data/cars.csv
 width: 600
