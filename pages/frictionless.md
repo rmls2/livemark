@@ -77,14 +77,14 @@ pprint(resource)
 ```python script
 from frictionless import Detector, describe
 
-detector = Detector(field_missing_values=["", "n/a"])
-resource = describe("data/countries.csv", detector=detector)
-resource.schema.get_field("neighbor_id").type = "integer"
-resource.schema.foreign_keys.append(
-    {"fields": ["neighbor_id"], "reference": {"resource": "", "fields": ["id"]}}
-)
-resource.path = "countries.csv"
-resource.to_yaml("data/countries.resource.yaml")
+# detector = Detector(field_missing_values=["", "n/a"])
+# resource = describe("data/countries.csv", detector=detector)
+# resource.schema.get_field("neighbor_id").type = "integer"
+# resource.schema.foreign_keys.append(
+#     {"fields": ["neighbor_id"], "reference": {"resource": "", "fields": ["id"]}}
+# )
+# resource.path = "countries.csv"
+# resource.to_yaml("data/countries.resource.yaml")
 ```
 
 ### Abrindo o yaml com os metadados gerados (exemplo 1)
