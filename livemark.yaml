@@ -23,6 +23,13 @@ links:
       path: https://www.youtube.com/channel/UCWU7_JMo6WmDiVy-ffOl8bQ
 pages:
     items:
-       - path: index
-       - path: pages/frictionless
+      - path: index
+      - name: Frictionless - Versão 4
+        items:
+          - path: pages/frictionless_v4/frictionless
+          - path: pages/frictionless_v4/Describing
+      - name: Frictionless - Versão 5
+        items:
+          - path: pages/frictionless_v5/frictionless
+          
        

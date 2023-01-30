@@ -11,7 +11,7 @@ decorator==5.1.1
 deepmerge==1.1.0
 docstring-parser==0.15
 et-xmlfile==1.1.0
-frictionless==4.40.8
+frictionless==5.5.1
 gitdb==4.0.10
 GitPython==3.1.30
 giturlparse==0.10.0
