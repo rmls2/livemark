@@ -57,7 +57,7 @@ pprint(report.flatten(["rowPosition", "fieldPosition", "code"]))
 
 ## Exemplo 1
 
-vamos exibir um dataset sobre países da europa. Um dataset coletado que possui varios erros de campo..
+vamos exibir um dataset sobre países da europa. Um dataset coletado que possui varios erros de campo.
 
 ```python script
 with open('data/countries.csv') as file:
