@@ -31,5 +31,5 @@ pages:
       - name: Frictionless - Versão 5
         items:
           - path: pages/frictionless_v5/frictionless
-          
+          - path: pages/frictionless_v5/exemplo1
        
