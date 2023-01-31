@@ -1791,7 +1791,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
             <ul class="secondary">
                 <li class="secondary ">
           <a href="frictionless.html" class="secondary">
-            Frictionless básico
+            Introdução
           </a>
         </li>
                 <li class="secondary active">
@@ -1902,7 +1902,7 @@ schema:
   <div>
             <div class="prev">
       <a href="frictionless.html">
-        « Frictionless básico
+        « Introdução
       </a>
     </div>
       </div>
@@ -2274,10 +2274,10 @@ document.addEventListener("DOMContentLoaded", function () {
           'text': "# Describing ```python script from frictionless import describe package = describe(\"data/table.txt\", type=\"package\") print(package.to_yaml()) ```",
       },
           'pages/frictionless_v5/frictionless': {
-          'name': 'Frictionless básico',
+          'name': 'Introdução',
           'path': 'pages/frictionless_v5/frictionless',
           'relpath': 'frictionless',
-          'text': "# Frictionless b\u00e1sico ``` python script with open(\u0027data/invalid.csv\u0027) as file: print(file.read()) ``` Agora vamos usar os metados para inferir diretamente os dados tabulates do arquivo \"invalid.csv\". (podemos edit\u00e1-lo e salv\u00e1-lo para fornecer as pessoas informa\u00e7\u00f5es uteis sobre esses dados) ``` python script from pprint import pprint from frictionless import describe resource = describe(\u0027data/invalid.csv\u0027) pprint(resource) ``` Agora que fornecemos um esquema de tabelas do arquivo de dados, podemos usar o \u0027extract\u0027 para ler os dados tabulares normalizados do arquivo CSV de origem: ``` python script from pprint import pprint from frictionless import extract rows = extract(\u0027data/invalid.csv\u0027) pprint(rows) ``` por \u00faltimo mas n\u00e3o menos importante vamos obter um relat\u00f3rio de valida\u00e7\u00e3o dos dados. Isso nos ajudar\u00e1 a identificar e corrigir os erros presentes nos dados tabulares. ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/invalid.csv\u0027) pprint(report.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) ```",
+          'text': "# Introdu\u00e7\u00e3o ``` python script with open(\u0027data/invalid.csv\u0027) as file: print(file.read()) ``` Agora vamos usar os metados para inferir diretamente os dados tabulates do arquivo \"invalid.csv\". (podemos edit\u00e1-lo e salv\u00e1-lo para fornecer as pessoas informa\u00e7\u00f5es uteis sobre esses dados) ``` python script from pprint import pprint from frictionless import describe resource = describe(\u0027data/invalid.csv\u0027) pprint(resource) ``` Agora que fornecemos um esquema de tabelas do arquivo de dados, podemos usar o \u0027extract\u0027 para ler os dados tabulares normalizados do arquivo CSV de origem: ``` python script from pprint import pprint from frictionless import extract rows = extract(\u0027data/invalid.csv\u0027) pprint(rows) ``` por \u00faltimo mas n\u00e3o menos importante vamos obter um relat\u00f3rio de valida\u00e7\u00e3o dos dados. Isso nos ajudar\u00e1 a identificar e corrigir os erros presentes nos dados tabulares. ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/invalid.csv\u0027) pprint(report.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) ```",
       },
           'pages/frictionless_v5/exemplo1': {
           'name': 'Exemplos Básicos',
