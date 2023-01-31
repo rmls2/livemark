@@ -1,4 +1,4 @@
-# Frictionless básico
+# Introdução
 
 ``` python script
 with open('data/invalid.csv') as file:
