@@ -83,7 +83,7 @@ pprint(target.read_rows())
 with open('data/countries-cleaned.csv') as file:
     print(file.read())
 ```
-## Encontrando os arquivo de dados corrigido
+## Encontrando os arquivo de dados corrigido.
 
 ```python script
 import os
