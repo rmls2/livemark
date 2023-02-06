@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content='Agora vamos usar os metados para inferir diretamente os dados tabulates do arquivo "invalid.csv". (podemos editá-lo e salvá-lo para fornecer as pessoas informações uteis sobre esses dados)'>
-<meta name="keywords" content="introdução">
+<meta name="description" content="None">
+<meta name="keywords" content="describing,data">
 <link rel="icon" href="../../assets/sti.png">
 <title>Robert Miller | livemark project</title>
 <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
@@ -1789,7 +1789,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
         Frictionless - Versão 5
       </a>
             <ul class="secondary">
-                <li class="secondary active">
+                <li class="secondary ">
           <a href="frictionless.html" class="secondary">
             Introdução
           </a>
@@ -1799,7 +1799,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
             Exemplos Básicos
           </a>
         </li>
-                <li class="secondary ">
+                <li class="secondary active">
           <a href="Describing_Data.html" class="secondary">
             Describing data 
           </a>
@@ -1811,79 +1811,81 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 </div>
 <div id="livemark-main">
 <div id="livemark-notes">
-      <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/frictionless.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-01-31 16:57)
+      <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Describing_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
+    (2023-02-03 10:31)
 </div>
 
-<h1>Introdução</h1>
-<div><pre><code class="language-python">with open('data/invalid.csv') as file:
+<h1>Describing data</h1>
+<div><pre><code class="language-python">from frictionless import describe
+
+package = describe("data/table.csv", type="package")
+print(package.to_yaml())
+</code></pre>
+
+<pre><code class="language-markup">resources:
+  - name: table
+    type: table
+    path: data/table.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string</code></pre>
+</div><div><pre><code class="language-python">with open('data/country-1.csv') as file:
     print(file.read())
 </code></pre>
 
-<pre><code class="language-markup">id,name,,name
-1,english
-1,english
+<pre><code class="language-markup">id,neighbor_id,name,population
+1,,Britain,67
+2,3,France,67
+3,2,Germany,83
+4,5,Italy,60
+5,4,Spain,47</code></pre>
+</div><div><pre><code class="language-python">from frictionless import Schema
 
-2,german,1,2,3</code></pre>
-</div><p>Agora vamos usar os metados para inferir diretamente os dados tabulates do arquivo "invalid.csv". (podemos editá-lo e salvá-lo para fornecer as pessoas informações uteis sobre esses dados)</p>
-<div><pre><code class="language-python">from pprint import pprint
-from frictionless import describe
-
-resource = describe('data/invalid.csv')
-pprint(resource)
+schema = Schema.describe("data/country-1.csv")
+schema.to_yaml("data/country.schema.yaml") # use schema.to_json for JSON
+</code></pre>
+</div><div><pre><code class="language-python">with open('data/country.schema.yaml') as file:
+    print(file.read())
 </code></pre>
 
-<pre><code class="language-markup">{'name': 'invalid',
- 'type': 'table',
- 'path': 'data/invalid.csv',
- 'scheme': 'file',
- 'format': 'csv',
- 'encoding': 'utf-8',
- 'mediatype': 'text/csv',
- 'schema': {'fields': [{'name': 'id', 'type': 'integer'},
-                       {'name': 'name', 'type': 'string'},
-                       {'name': 'field3', 'type': 'integer'},
-                       {'name': 'name2', 'type': 'integer'}]}}</code></pre>
-</div><p>Agora que fornecemos um esquema de tabelas do arquivo de dados, podemos usar o 'extract' para ler os dados tabulares normalizados do arquivo CSV de origem: </p>
-<div><pre><code class="language-python">from pprint import pprint
-from frictionless import extract
+<pre><code class="language-markup">fields:
+  - name: id
+    type: integer
+  - name: neighbor_id
+    type: integer
+  - name: name
+    type: string
+  - name: population
+    type: integer</code></pre>
+</div><div><pre><code class="language-python">from frictionless import Schema
 
-rows = extract('data/invalid.csv')
-pprint(rows)
+schema = Schema.describe("data/country-1.csv")
+schema.get_field("id").title = "Identifier"
+schema.get_field("neighbor_id").title = "Identifier of the neighbor"
+schema.get_field("name").title = "Name of the country"
+schema.get_field("population").title = "Population"
+schema.get_field("population").description = "According to the year 2020's data"
+schema.get_field("population").constraints["minimum"] = 0
+schema.foreign_keys.append(
+    {"fields": ["neighbor_id"], "reference": {"resource": "", "fields": ["id"]}}
+)
+schema.to_yaml("data/country.schema-full.yaml")
+
 </code></pre>
-
-<pre><code class="language-markup">[{'id': 1, 'name': 'english', 'field3': None, 'name2': None},
- {'id': 1, 'name': 'english', 'field3': None, 'name2': None},
- {'id': None, 'name': None, 'field3': None, 'name2': None},
- {'id': 2, 'name': 'german', 'field3': 1, 'name2': 2}]</code></pre>
-</div><p>por último mas não menos importante vamos obter um relatório de validação dos dados. Isso nos ajudará a identificar e corrigir os erros presentes nos dados tabulares.</p>
-<div><pre><code class="language-python">from pprint import pprint
-from frictionless import validate
-
-report = validate('data/invalid.csv')
-pprint(report.flatten(["rowNumber", "fieldNumber", "type"]))
-</code></pre>
-
-<pre><code class="language-markup">[[None, 3, 'blank-label'],
- [None, 4, 'duplicate-label'],
- [2, 3, 'missing-cell'],
- [2, 4, 'missing-cell'],
- [3, 3, 'missing-cell'],
- [3, 4, 'missing-cell'],
- [4, None, 'blank-row'],
- [5, 5, 'extra-cell']]</code></pre>
 </div>
 
 <div id="livemark-signs">
   <div>
-        <div class="next">
-      <a href="exemplo1.html">
-        Exemplos Básicos »
-      </a>
-    </div>
             <div class="prev">
-      <a href="../frictionless_v4/Describing.html">
-        « Describing
+      <a href="exemplo1.html">
+        « Exemplos Básicos
       </a>
     </div>
       </div>

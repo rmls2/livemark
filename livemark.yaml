@@ -22,14 +22,14 @@ links:
     - name: YouTube
       path: https://www.youtube.com/channel/UCWU7_JMo6WmDiVy-ffOl8bQ
 pages:
-    items:
-      - path: index
-      - name: Frictionless - Versão 4
-        items:
-          - path: pages/frictionless_v4/frictionless
-          - path: pages/frictionless_v4/Describing
-      - name: Frictionless - Versão 5
-        items:
-          - path: pages/frictionless_v5/frictionless
-          - path: pages/frictionless_v5/exemplo1
-       
+  items:
+    - path: index
+    - name: Frictionless - Versão 4
+      items:
+        - path: pages/frictionless_v4/frictionless
+        - path: pages/frictionless_v4/Describing
+    - name: Frictionless - Versão 5
+      items:
+        - path: pages/frictionless_v5/frictionless
+        - path: pages/frictionless_v5/exemplo1
+        - path: pages/frictionless_v5/Describing_Data

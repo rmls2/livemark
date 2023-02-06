@@ -1,8 +1,8 @@
-# Describing 
+# Describing
 
 ```python script
 from frictionless import describe
 
-package = describe("data/table.txt", type="package")
+package = describe("data/table.csv", type="package")
 print(package.to_yaml())
 ```

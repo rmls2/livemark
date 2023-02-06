@@ -73,9 +73,9 @@ pipeline = Pipeline(steps=[
     steps.table_write(path="data/countries-cleaned.csv"),
 ])
 
-# resource = Resource('data/countries.csv')
-target = Resource('data/countries.csv').transform(pipeline)
-pprint(target.read_rows())
+resource = Resource('data/countries.csv')
+target = resource.transform(pipeline)
+pprint(target.read_rows()) 
 ```
 ## Exibindo o arquivo de dados csv corrigido
 
