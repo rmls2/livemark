@@ -1812,7 +1812,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 <div id="livemark-main">
 <div id="livemark-notes">
       <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Describing_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-02-03 10:31)
+    (2023-02-07 11:33)
 </div>
 
 <h1>Describing data</h1>
@@ -1836,7 +1836,8 @@ print(package.to_yaml())
           type: integer
         - name: name
           type: string</code></pre>
-</div><div><pre><code class="language-python">with open('data/country-1.csv') as file:
+</div><h2>Describing a Schema</h2>
+<div><pre><code class="language-python">with open('data/country-1.csv') as file:
     print(file.read())
 </code></pre>
 
@@ -1848,10 +1849,13 @@ print(package.to_yaml())
 5,4,Spain,47</code></pre>
 </div><div><pre><code class="language-python">from frictionless import Schema
 
+#vai descrever só os metadados do table schema
 schema = Schema.describe("data/country-1.csv")
+#vai criar o arquivo yaml para o table schema
 schema.to_yaml("data/country.schema.yaml") # use schema.to_json for JSON
 </code></pre>
-</div><div><pre><code class="language-python">with open('data/country.schema.yaml') as file:
+</div><div><pre><code class="language-python">#vai abrir o yaml gerado acima
+with open('data/country.schema.yaml') as file:
     print(file.read())
 </code></pre>
 
@@ -1864,7 +1868,8 @@ schema.to_yaml("data/country.schema.yaml") # use schema.to_json for JSON
     type: string
   - name: population
     type: integer</code></pre>
-</div><div><pre><code class="language-python">from frictionless import Schema
+</div><h2>Fornecendo informações adcionais</h2>
+<div><pre><code class="language-python">from frictionless import Schema
 
 schema = Schema.describe("data/country-1.csv")
 schema.get_field("id").title = "Identifier"
@@ -1879,6 +1884,34 @@ schema.foreign_keys.append(
 schema.to_yaml("data/country.schema-full.yaml")
 
 </code></pre>
+</div><div><pre><code class="language-python">with open('data/country.schema-full.yaml') as file:
+    print(file.read())
+
+</code></pre>
+
+<pre><code class="language-markup">fields:
+  - name: id
+    type: integer
+    title: Identifier
+  - name: neighbor_id
+    type: integer
+    title: Identifier of the neighbor
+  - name: name
+    type: string
+    title: Name of the country
+  - name: population
+    type: integer
+    title: Population
+    description: According to the year 2020's data
+    constraints:
+      minimum: 0
+foreignKeys:
+  - fields:
+      - neighbor_id
+    reference:
+      resource: ''
+      fields:
+        - id</code></pre>
 </div>
 
 <div id="livemark-signs">
@@ -2272,7 +2305,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Describing data ',
           'path': 'pages/frictionless_v5/Describing_Data',
           'relpath': 'Describing_Data',
-          'text': "# Describing data ```python script from frictionless import describe package = describe(\"data/table.csv\", type=\"package\") print(package.to_yaml()) ``` ```python script with open(\u0027data/country-1.csv\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.to_yaml(\"data/country.schema.yaml\") # use schema.to_json for JSON ``` ```python script with open(\u0027data/country.schema.yaml\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.get_field(\"id\").title = \"Identifier\" schema.get_field(\"neighbor_id\").title = \"Identifier of the neighbor\" schema.get_field(\"name\").title = \"Name of the country\" schema.get_field(\"population\").title = \"Population\" schema.get_field(\"population\").description = \"According to the year 2020\u0027s data\" schema.get_field(\"population\").constraints[\"minimum\"] = 0 schema.foreign_keys.append( {\"fields\": [\"neighbor_id\"], \"reference\": {\"resource\": \"\", \"fields\": [\"id\"]}} ) schema.to_yaml(\"data/country.schema-full.yaml\") ```",
+          'text': "# Describing data ```python script from frictionless import describe package = describe(\"data/table.csv\", type=\"package\") print(package.to_yaml()) ``` ## Describing a Schema ```python script with open(\u0027data/country-1.csv\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema #vai descrever s\u00f3 os metadados do table schema schema = Schema.describe(\"data/country-1.csv\") #vai criar o arquivo yaml para o table schema schema.to_yaml(\"data/country.schema.yaml\") # use schema.to_json for JSON ``` ```python script #vai abrir o yaml gerado acima with open(\u0027data/country.schema.yaml\u0027) as file: print(file.read()) ``` ## Fornecendo informa\u00e7\u00f5es adcionais ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.get_field(\"id\").title = \"Identifier\" schema.get_field(\"neighbor_id\").title = \"Identifier of the neighbor\" schema.get_field(\"name\").title = \"Name of the country\" schema.get_field(\"population\").title = \"Population\" schema.get_field(\"population\").description = \"According to the year 2020\u0027s data\" schema.get_field(\"population\").constraints[\"minimum\"] = 0 schema.foreign_keys.append( {\"fields\": [\"neighbor_id\"], \"reference\": {\"resource\": \"\", \"fields\": [\"id\"]}} ) schema.to_yaml(\"data/country.schema-full.yaml\") ``` ```python script with open(\u0027data/country.schema-full.yaml\u0027) as file: print(file.read()) ```",
       },
       };
   const searchIndex = lunr(function () {
