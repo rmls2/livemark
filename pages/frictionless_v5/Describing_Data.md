@@ -46,7 +46,7 @@ schema.get_field("population").title = "Population"
 schema.get_field("population").description = "According to the year 2020's data"
 #definindo uma restrição para o campo população dizendo que não pode ser menor que 0
 schema.get_field("population").constraints["minimum"] = 0
-#adcionando uma chave estrangeira dizendo que "neighbor_id" deve estar presente no campo "ID" 
+#adcionando uma chave estrangeira dizendo que "neighbor_id" faz referência ao campo id e ambos estão no mesmo resource
 schema.foreign_keys.append(
     {"fields": ["neighbor_id"], "reference": {"resource": "", "fields": ["id"]}}
 )
@@ -86,7 +86,6 @@ Como podemos ver houve uma inferencia errada do table schema, não existe só um
 
 ```python script
 
-
 from frictionless import Schema, describe
 
 resource = describe("data/country-2.csv")
@@ -94,20 +93,21 @@ resource = describe("data/country-2.csv")
 resource.dialect.header_rows = [2]
 #Definimos o delimitador CSV como ";"
 resource.dialect.get_control('csv').delimiter = ";"
-#reutilizamos o arquivo country.schema.yaml criado anteriormente pois os dados tem a mesma estrutura e significado
-resource.schema = "data/country.schema.yaml"
+#esquema que será reutilizado no country.resource.yaml
+resource.schema = "country.schema.yaml"
 resource.path = "country-2.csv"
 #Geramos um novo resource com os metadados editados acima 
 resource.to_yaml("data/country.resource-cleaned.yaml")
 
 ```
 
+note que no Data Resource abaixo o esquema será identificado por "country.schema.yaml", sem isso nosso schema ainda iria mostrar a informação errada presente no resource acima
+
 ```python script
 with open('data/country.resource-cleaned.yaml') as file:
     print(file.read())
 
 ```
-
 
 ## Describing a package
 
@@ -116,3 +116,15 @@ with open('data/country-3.csv') as file:
     print(file.read())
 
 ```
+
+```python script
+from frictionless import Schema
+
+schema = Schema.describe("data/country-1.csv")
+schema.to_yaml("country.schema.yaml")
+
+
+# package = describe("data/table.csv", type="package")
+# print(package.to_yaml())
+```
+

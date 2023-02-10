@@ -10,4 +10,4 @@ dialect:
     - 2
   csv:
     delimiter: ;
-schema: data/country.schema.yaml
+schema: country.schema.yaml
