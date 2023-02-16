@@ -2673,7 +2673,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Extracting Data',
           'path': 'pages/frictionless_v5/Extracting_data',
           'relpath': 'Extracting_data',
-          'text': "# Extracting Data \"voltei recife foi a saudade que me trouxe pelo bra\u00e7o\" ```python script from frictionless import Resource, extract from pprint import pprint resource = Resource(\u0027data/capital-3.csv\u0027) resource.infer() # as an example, in the next line we will append the schema resource.schema.missing_values.append(\u00273\u0027) # will interpret 3 as a missing value resource.path = \u0027capital-3.csv\u0027 resource.to_yaml(\u0027data/capital.resource-test.yaml\u0027) # use resource.to_json for JSON format rows = extract(\u0027data/capital.resource-test.yaml\u0027) pprint(rows) ```",
+          'text': "# Extracting Data extrair dados nada mais \u00e9 do que LER dados tabulares de uma fonte. ### fun\u00e7\u00f5es do Extract extract - detecta o arquivo de origem e extrai os dados tabulares Resource.extract - retorna uma tabela de dados Package.extrat - retorna um mapa das tabelas de um pacote ```python script from frictionless import Resource, extract from pprint import pprint resource = Resource(\u0027data/capital-3.csv\u0027) resource.infer() # as an example, in the next line we will append the schema resource.schema.missing_values.append(\u00273\u0027) # will interpret 3 as a missing value resource.path = \u0027capital-3.csv\u0027 resource.to_yaml(\u0027data/capital.resource-test.yaml\u0027) # use resource.to_json for JSON format rows = extract(\u0027data/capital.resource-test.yaml\u0027) pprint(rows) ```",
       },
       };
   const searchIndex = lunr(function () {
