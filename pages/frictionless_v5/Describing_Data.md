@@ -40,3 +40,45 @@ schema.foreign_keys.append(
 schema.to_yaml("data/country.schema-full.yaml")
 
 ```
+## Describing a package
+
+```python script
+with open('data/country-3.csv') as file:
+    print(file.read())
+```
+
+```python script
+with open('data/capital-3.csv') as file:
+    print(file.read())
+```
+```python script
+from frictionless import describe
+
+package = describe("data/*-3.csv")
+print(package.to_yaml())
+```
+
+adcionando metadados ao pacote
+
+```python script
+from frictionless import describe
+
+package = describe("data/*-3.csv")
+package.title = "Countries and their capitals"
+package.description = "The data was collected as a research project"
+package.get_resource("country-3").name = "country"
+package.get_resource("capital-3").name = "capital"
+package.get_resource("country").schema.foreign_keys.append(
+    {"fields": ["capital_id"], "reference": {"resource": "capital", "fields": ["id"]}}
+)
+package.to_yaml("data/country.package.yaml")
+
+```
+
+```python script
+with open('data/country.package.yaml') as file:
+    print(file.read())
+```
+```python script
+```
+## Metadata importance

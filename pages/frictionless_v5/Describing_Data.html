@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="None">
+<meta name="description" content="adcionando metadados ao pacote">
 <meta name="keywords" content="describing,data">
 <link rel="icon" href="../../assets/sti.png">
 <title>Robert Miller | livemark project</title>
@@ -1812,7 +1812,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 <div id="livemark-main">
 <div id="livemark-notes">
       <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Describing_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-02-03 10:31)
+    (2023-02-15 22:52)
 </div>
 
 <h1>Describing data</h1>
@@ -1879,7 +1879,124 @@ schema.foreign_keys.append(
 schema.to_yaml("data/country.schema-full.yaml")
 
 </code></pre>
-</div>
+</div><h2>Describing a package</h2>
+<div><pre><code class="language-python">with open('data/country-3.csv') as file:
+    print(file.read())
+</code></pre>
+
+<pre><code class="language-markup">id,capital_id,name,population
+1,1,Britain,67
+2,3,France,67
+3,2,Germany,83
+4,5,Italy,60
+5,4,Spain,47</code></pre>
+</div><div><pre><code class="language-python">with open('data/capital-3.csv') as file:
+    print(file.read())
+</code></pre>
+
+<pre><code class="language-markup">id,name
+1,London
+2,Berlin
+3,Paris
+4,Madrid
+5,Rome</code></pre>
+</div><div><pre><code class="language-python">from frictionless import describe
+
+package = describe("data/*-3.csv")
+print(package.to_yaml())
+</code></pre>
+
+<pre><code class="language-markup">resources:
+  - name: capital-3
+    type: table
+    path: data/capital-3.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+  - name: country-3
+    type: table
+    path: data/country-3.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: capital_id
+          type: integer
+        - name: name
+          type: string
+        - name: population
+          type: integer</code></pre>
+</div><p>adcionando metadados ao pacote</p>
+<div><pre><code class="language-python">from frictionless import describe
+
+package = describe("data/*-3.csv")
+package.title = "Countries and their capitals"
+package.description = "The data was collected as a research project"
+package.get_resource("country-3").name = "country"
+package.get_resource("capital-3").name = "capital"
+package.get_resource("country").schema.foreign_keys.append(
+    {"fields": ["capital_id"], "reference": {"resource": "capital", "fields": ["id"]}}
+)
+package.to_yaml("data/country.package.yaml")
+
+</code></pre>
+</div><div><pre><code class="language-python">with open('data/country.package.yaml') as file:
+    print(file.read())
+</code></pre>
+
+<pre><code class="language-markup">title: Countries and their capitals
+description: The data was collected as a research project
+resources:
+  - name: capital
+    type: table
+    path: data/capital-3.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+  - name: country
+    type: table
+    path: data/country-3.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: capital_id
+          type: integer
+        - name: name
+          type: string
+        - name: population
+          type: integer
+      foreignKeys:
+        - fields:
+            - capital_id
+          reference:
+            resource: capital
+            fields:
+              - id</code></pre>
+</div><div><pre><code class="language-python"></code></pre>
+</div><h2>Metadata importance</h2>
 
 <div id="livemark-signs">
   <div>
@@ -2272,7 +2389,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Describing data ',
           'path': 'pages/frictionless_v5/Describing_Data',
           'relpath': 'Describing_Data',
-          'text': "# Describing data ```python script from frictionless import describe package = describe(\"data/table.csv\", type=\"package\") print(package.to_yaml()) ``` ```python script with open(\u0027data/country-1.csv\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.to_yaml(\"data/country.schema.yaml\") # use schema.to_json for JSON ``` ```python script with open(\u0027data/country.schema.yaml\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.get_field(\"id\").title = \"Identifier\" schema.get_field(\"neighbor_id\").title = \"Identifier of the neighbor\" schema.get_field(\"name\").title = \"Name of the country\" schema.get_field(\"population\").title = \"Population\" schema.get_field(\"population\").description = \"According to the year 2020\u0027s data\" schema.get_field(\"population\").constraints[\"minimum\"] = 0 schema.foreign_keys.append( {\"fields\": [\"neighbor_id\"], \"reference\": {\"resource\": \"\", \"fields\": [\"id\"]}} ) schema.to_yaml(\"data/country.schema-full.yaml\") ```",
+          'text': "# Describing data ```python script from frictionless import describe package = describe(\"data/table.csv\", type=\"package\") print(package.to_yaml()) ``` ```python script with open(\u0027data/country-1.csv\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.to_yaml(\"data/country.schema.yaml\") # use schema.to_json for JSON ``` ```python script with open(\u0027data/country.schema.yaml\u0027) as file: print(file.read()) ``` ```python script from frictionless import Schema schema = Schema.describe(\"data/country-1.csv\") schema.get_field(\"id\").title = \"Identifier\" schema.get_field(\"neighbor_id\").title = \"Identifier of the neighbor\" schema.get_field(\"name\").title = \"Name of the country\" schema.get_field(\"population\").title = \"Population\" schema.get_field(\"population\").description = \"According to the year 2020\u0027s data\" schema.get_field(\"population\").constraints[\"minimum\"] = 0 schema.foreign_keys.append( {\"fields\": [\"neighbor_id\"], \"reference\": {\"resource\": \"\", \"fields\": [\"id\"]}} ) schema.to_yaml(\"data/country.schema-full.yaml\") ``` ## Describing a package ```python script with open(\u0027data/country-3.csv\u0027) as file: print(file.read()) ``` ```python script with open(\u0027data/capital-3.csv\u0027) as file: print(file.read()) ``` ```python script from frictionless import describe package = describe(\"data/*-3.csv\") print(package.to_yaml()) ``` adcionando metadados ao pacote ```python script from frictionless import describe package = describe(\"data/*-3.csv\") package.title = \"Countries and their capitals\" package.description = \"The data was collected as a research project\" package.get_resource(\"country-3\").name = \"country\" package.get_resource(\"capital-3\").name = \"capital\" package.get_resource(\"country\").schema.foreign_keys.append( {\"fields\": [\"capital_id\"], \"reference\": {\"resource\": \"capital\", \"fields\": [\"id\"]}} ) package.to_yaml(\"data/country.package.yaml\") ``` ```python script with open(\u0027data/country.package.yaml\u0027) as file: print(file.read()) ``` ```python script ``` ## Metadata importance",
       },
       };
   const searchIndex = lunr(function () {
