@@ -131,6 +131,7 @@ from frictionless import describe
 package = describe("data/*-3.csv")
 print(package.to_yaml())
 
+
 ```
 
 ```python script
@@ -152,5 +153,90 @@ with open('data/country.package.yaml') as file:
     print(file.read())
 ```
 
+## Inferindo metadados
+
+Muitas classes do Frictionless Framework são classes de metadados como Schema, Resource ou Package. Todas as seções abaixo são aplicáveis ​​a todas essas classes.
+
+```python script
+from frictionless import Resource
+
+resource = Resource("data/country-1.csv")
+print(resource)
+```
+
+No exemplo acima não oferecemos nenhum metadados execeto para path, por isso obtivemos o resultado esperado.
+
+o comando resource.infer aparentemente infere os metadados adcionais do arquivo de dados dentro da classe Resource.
+
+```python script
+from pprint import pprint
+from frictionless import Resource
+
+resource = Resource("data/country-1.csv")
+resource.infer(stats=True)
+
+print(f"{resource}\n")
+
+print(resource.to_yaml())
+
+```
+
+o 'stats = True' só vai servir para mostrar estatísticas o infer sozinho vai inferir metadados. As classes de metadados Package e Schema também possui o método 'infer'.
+
+## Validando metadados
+
+```python script
+import yaml
+from frictionless import Resource
+
+descriptor = {}
+descriptor['path'] = 'data/country-1.csv'
+descriptor['title'] = 1
+try:
+    Resource(descriptor)
+# Execption é um tipo de exceção que abarca qualquer exeção sem necessidade especificar
+except Exception as exception:
+    print(exception.error)
+    #especifica o erro, nesse caso do descriptor
+    print(exception.reasons)
+
+```
+
+## Transformando metadados
+
+```python script
+from frictionless import Resource
+
+resource = Resource("data/country.resource-cleaned.yaml")
+resource.title = "Countries"
+resource.description = "It's a research project"
+# resource.dialect.header_rows = [2]
+resource.to_yaml("data/country.resource-updated.yaml")
+
+```
+
+```python script
+with open('data/country.resource-updated.yaml') as file:
+    print(file.read())
+```
+
+```python script
+from frictionless import Resource
+
+resource = Resource("data/country.resource-updated.yaml")
+resource.custom["customKey1"] = "Value1"
+resource.custom["customKey2"] = "Value2"
+resource.to_yaml("data/country.resource-updated2.yaml")
+
+```
+```python script
+with open('data/country.resource-updated2.yaml') as file:
+    print(file.read())
+```
 ```python script
 ```
+```python script
+```
+```python script
+```
+
