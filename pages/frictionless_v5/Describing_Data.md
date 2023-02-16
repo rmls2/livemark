@@ -233,14 +233,9 @@ resource.custom["customKey2"] = "Value2"
 resource.to_yaml("data/country.resource-updated2.yaml")
 
 ```
+
 ```python script
 with open('data/country.resource-updated2.yaml') as file:
-    print(file.read())
-```
-```python script
-```
-```python script
-```
-```python script
-```
+    print(file.read()) 
 
+```

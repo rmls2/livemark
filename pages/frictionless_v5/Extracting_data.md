@@ -4,11 +4,13 @@ extrair dados nada mais é do que LER dados tabulares de uma fonte.
 
 ### funções do Extract
 
-extract - detecta o arquivo de origem e extrai os dados tabulares
-resource.extract - retorna uma tabela de dados 
-rackage.extrat - retorna um mapa das tabelas de um pacote
+extract - detecta o arquivo de origem e extrai os dados tabulares  
+resource.extract - retorna uma tabela de dados  
+package.extract - retorna um mapa das tabelas de um pacote  
 
 extraindo um recurso de um arquivo descritor:
+
+## Extraindo um recurso
 
 ```python script
 
@@ -27,6 +29,16 @@ rows = extract('data/capital.resource-test.yaml')
 pprint(rows)
 
 ```
+
+```python script
+from frictionless import Resource
+from pprint import pprint
+
+resource = Resource('data/capital.resource-test.yaml')
+pprint(resource.extract())
+
+``` 
+
 No exemplo acima usamos o extract em cima do yaml para uma extração que levasse em considerações alterações no arquivo original.
 
 ## Extraindo um Pacote
@@ -44,6 +56,8 @@ pprint(data)
 
 ```
 
+outra forma é extrair um pacote de um arquivo descritor yaml:
+
 ```python script
 from frictionless import Package
 from pprint import pprint
@@ -54,4 +68,6 @@ pprint(package.extract())
 ```
 
 ```python script
+
 ```
+## Resource Class
