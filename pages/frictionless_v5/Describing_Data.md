@@ -123,9 +123,36 @@ from frictionless import Schema
 schema = Schema.describe("data/country-1.csv")
 schema.to_yaml("country.schema.yaml")
 
+```
 
-# package = describe("data/table.csv", type="package")
-# print(package.to_yaml())
+```python script
+from frictionless import describe
+
+package = describe("data/*-3.csv")
+print(package.to_yaml())
+
+```
+
+```python script
+from frictionless import describe
+
+package = describe("data/*-3.csv")
+package.title = "Countries and their capitals"
+package.description = "The data was collected as a research project"
+package.get_resource("country-3").name = "country"
+package.get_resource("capital-3").name = "capital"
+package.get_resource("country").schema.foreign_keys.append(
+    {"fields": ["capital_id"], "reference": {"resource": "capital", "fields": ["id"]}}
+)
+package.to_yaml("data/country.package.yaml")
+```
+
+```python script
+with open('data/country.package.yaml') as file:
+    print(file.read())
+```
+
+```python script
 ```
 
 ## Extracting
