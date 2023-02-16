@@ -3,7 +3,7 @@ description: The data was collected as a research project
 resources:
   - name: capital
     type: table
-    path: data/capital-3.csv
+    path: capital-3.csv
     scheme: file
     format: csv
     encoding: utf-8
@@ -16,7 +16,7 @@ resources:
           type: string
   - name: country
     type: table
-    path: data/country-3.csv
+    path: country-3.csv
     scheme: file
     format: csv
     encoding: utf-8

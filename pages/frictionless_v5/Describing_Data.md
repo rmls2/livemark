@@ -145,7 +145,11 @@ package.get_resource("capital-3").name = "capital"
 package.get_resource("country").schema.foreign_keys.append(
     {"fields": ["capital_id"], "reference": {"resource": "capital", "fields": ["id"]}}
 )
+package.get_resource("capital").path = "capital-3.csv"
+package.get_resource("country").path = "country-3.csv"
+
 package.to_yaml("data/country.package.yaml")
+
 ```
 
 ```python script

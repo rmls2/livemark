@@ -5,8 +5,10 @@ extrair dados nada mais é do que LER dados tabulares de uma fonte.
 ### funções do Extract
 
 extract - detecta o arquivo de origem e extrai os dados tabulares
-Resource.extract - retorna uma tabela de dados 
-Package.extrat - retorna um mapa das tabelas de um pacote
+resource.extract - retorna uma tabela de dados 
+rackage.extrat - retorna um mapa das tabelas de um pacote
+
+extraindo um recurso de um arquivo descritor:
 
 ```python script
 
@@ -25,11 +27,30 @@ rows = extract('data/capital.resource-test.yaml')
 pprint(rows)
 
 ```
+No exemplo acima usamos o extract em cima do yaml para uma extração que levasse em considerações alterações no arquivo original.
+
+## Extraindo um Pacote
+
+A terceira maneira de extrair informações é de um pacote, que é um conjunto de dois ou mais arquivos, por exemplo, dois arquivos de dados e um arquivo de metadados correspondente. 
+
+No exemplo abaixo forneceremos dois arquivos de dados para o extract que consiguirá indentificar que é um conjunto de dados
 
 ```python script
+from pprint import pprint
+from frictionless import extract
+
+data = extract('data/*-3.csv')
+pprint(data)
+
 ```
 
 ```python script
+from frictionless import Package
+from pprint import pprint
+
+package = Package('data/country.package.yaml')
+pprint(package.extract())
+
 ```
 
 ```python script
