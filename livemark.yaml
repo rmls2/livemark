@@ -33,3 +33,4 @@ pages:
         - path: pages/frictionless_v5/frictionless
         - path: pages/frictionless_v5/exemplo1
         - path: pages/frictionless_v5/Describing_Data
+        - path: pages/frictionless_v5/Extracting_data
