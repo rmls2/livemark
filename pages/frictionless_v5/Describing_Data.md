@@ -96,7 +96,7 @@ resource.dialect.get_control('csv').delimiter = ";"
 #esquema que será reutilizado no country.resource.yaml
 resource.schema = "country.schema.yaml"
 resource.path = "country-2.csv"
-#Geramos um novo resource com os metadados editados acima 
+#Geramos um novo resource com os metadados editados acima
 resource.to_yaml("data/country.resource-cleaned.yaml")
 
 ```
@@ -177,7 +177,7 @@ from pprint import pprint
 from frictionless import Resource
 
 resource = Resource("data/country-1.csv")
-resource.infer(stats=True)
+resource.infer(stats=False)
 
 print(f"{resource}\n")
 
@@ -185,7 +185,9 @@ print(resource.to_yaml())
 
 ```
 
-o 'stats = True' só vai servir para mostrar estatísticas o infer sozinho vai inferir metadados. As classes de metadados Package e Schema também possui o método 'infer'.
+o 'stats = True' só vai servir para mostrar estatísticas o infer sozinho vai inferir metadados.  
+Sem o método 'infer()' o único metadado gerado com o resource será o caminho do arquivo  
+As classes de metadados Package e Schema também possui o método 'infer'.
 
 ## Validando metadados
 
@@ -236,6 +238,6 @@ resource.to_yaml("data/country.resource-updated2.yaml")
 
 ```python script
 with open('data/country.resource-updated2.yaml') as file:
-    print(file.read()) 
+    print(file.read())
 
 ```
