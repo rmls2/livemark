@@ -71,3 +71,91 @@ pprint(package.extract())
 
 ```
 ## Resource Class
+
+A classe Resource fornece metadados de um recurso de dados possui funções de leitura e de fluxo. As funções extract leem linhas na memória; o Resource faz o mesmo mas oferece três opçoes de saída de dados: rows, data, textou bytes.
+
+```python script
+from pprint import pprint
+from frictionless import Resource
+
+resource = Resource('data/country-3.csv')
+pprint(resource.read_bytes())
+
+```
+É uma representação textual do conteúdo:
+
+
+```python script
+from frictionless import Resource
+
+resource = Resource('data/country-3.csv')
+pprint(resource.read_text())
+
+```
+para dados tabulares representação bruta do conteúdo tabular:
+
+```python script
+from frictionless import Resource
+
+resource = Resource('data/country-3.csv')
+pprint(resource.read_cells())
+
+```
+Para dados tabulares, há linhas disponíveis que são listas normalizadas apresentadas como dicionários:
+
+```python script
+from frictionless import Resource
+
+resource = Resource('data/country-3.csv')
+pprint(resource.read_rows())
+
+
+```
+Para dados tabulares é possível ler somente o cabeçalho
+
+```python script
+from frictionless import Resource
+
+with Resource('data/country-3.csv') as resource:
+    pprint(resource.header)
+```
+### Interfaces de transmissão
+
+É muito útil ler todos os seus dados na memória, mas nem sempre é possível se um arquivo for muito grande. Para tais casos, o Frictionless fornece funções de streaming:
+
+```python script
+from frictionless import Resource
+
+with Resource('data/country-3.csv') as resource:
+    resource.byte_stream
+    resource.text_stream
+    # resource.list_stream
+    resource.row_stream 
+```
+## Package Class
+
+Essa classe provê funções para ler o conteúdo de um pacote. Criaremos abaixo um descrito de pacote, dessa vez usando json:
+
+```python script
+from frictionless import describe
+
+package = describe('data/*-3.csv')
+package.to_json('data/country.package.json')
+```
+Podemos criar um pacote a partir de arquivos de dados (usando seus caminhos) e então ler os recursos do pacote:
+
+```python script
+from frictionless import Package
+
+package = Package('data/*-3.csv')
+package.infer(sample=False)
+pprint(package.get_resource('country-3').read_rows())
+pprint(package.get_resource('capital-3').read_rows())
+```
+O pacote por si só não fornece nenhuma função de leitura diretamente porque é apenas um contrainer. Você pode selecionar o recurso de um pacakge e usar a API de recursos acima para leitura de dados.
+
+```python script
+
+```
+
+
