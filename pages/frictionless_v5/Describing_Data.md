@@ -1,4 +1,4 @@
-# Describing data
+# Describing Data
 
 ```python script
 from frictionless import describe
