@@ -1822,7 +1822,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 <div id="livemark-main">
 <div id="livemark-notes">
       <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Validating_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-02-22 12:39)
+    (2023-02-23 08:35)
 </div>
 
 <h1>Validating Data</h1>
@@ -1855,7 +1855,7 @@ print(report)
 </code></pre>
 
 <pre><code class="language-markup">{'valid': False,
- 'stats': {'tasks': 1, 'warnings': 0, 'errors': 5, 'seconds': 0.009},
+ 'stats': {'tasks': 1, 'warnings': 0, 'errors': 5, 'seconds': 0.018},
  'warnings': [],
  'errors': [],
  'tasks': [{'valid': False,
@@ -1870,7 +1870,7 @@ print(report)
                       'rows': 11,
                       'warnings': 0,
                       'errors': 5,
-                      'seconds': 0.009},
+                      'seconds': 0.018},
             'warnings': [],
             'errors': [{'type': 'duplicate-label',
                         'title': 'Duplicate Label',
@@ -1993,7 +1993,7 @@ print(report)
 </code></pre>
 
 <pre><code class="language-markup">{'valid': False,
- 'stats': {'tasks': 1, 'warnings': 0, 'errors': 5, 'seconds': 0.017},
+ 'stats': {'tasks': 1, 'warnings': 0, 'errors': 5, 'seconds': 0.012},
  'warnings': [],
  'errors': [],
  'tasks': [{'valid': False,
@@ -2008,7 +2008,7 @@ print(report)
                       'rows': 11,
                       'warnings': 0,
                       'errors': 5,
-                      'seconds': 0.017},
+                      'seconds': 0.012},
             'warnings': [],
             'errors': [{'type': 'duplicate-label',
                         'title': 'Duplicate Label',
@@ -2098,7 +2098,7 @@ print(report)
 </code></pre>
 
 <pre><code class="language-markup">{'valid': False,
- 'stats': {'tasks': 1, 'warnings': 0, 'errors': 7, 'seconds': 0.018},
+ 'stats': {'tasks': 1, 'warnings': 0, 'errors': 7, 'seconds': 0.011},
  'warnings': [],
  'errors': [],
  'tasks': [{'valid': False,
@@ -2113,7 +2113,7 @@ print(report)
                       'rows': 11,
                       'warnings': 0,
                       'errors': 7,
-                      'seconds': 0.018},
+                      'seconds': 0.011},
             'warnings': [],
             'errors': [{'type': 'duplicate-label',
                         'title': 'Duplicate Label',
@@ -2233,7 +2233,7 @@ print(report)
 </code></pre>
 
 <pre><code class="language-markup">{'valid': False,
- 'stats': {'tasks': 2, 'warnings': 0, 'errors': 5, 'seconds': 0.015},
+ 'stats': {'tasks': 2, 'warnings': 0, 'errors': 5, 'seconds': 0.028},
  'warnings': [],
  'errors': [],
  'tasks': [{'valid': False,
@@ -2248,7 +2248,7 @@ print(report)
                       'rows': 11,
                       'warnings': 0,
                       'errors': 5,
-                      'seconds': 0.006},
+                      'seconds': 0.012},
             'warnings': [],
             'errors': [{'type': 'duplicate-label',
                         'title': 'Duplicate Label',
@@ -2331,7 +2331,7 @@ print(report)
                       'rows': 5,
                       'warnings': 0,
                       'errors': 0,
-                      'seconds': 0.004},
+                      'seconds': 0.006},
             'warnings': [],
             'errors': []}]}</code></pre>
 </div><h2>Validando uma Consulta</h2>
@@ -2345,7 +2345,7 @@ print(report)
 </code></pre>
 
 <pre><code class="language-markup">{'valid': False,
- 'stats': {'tasks': 1, 'warnings': 0, 'errors': 1, 'seconds': 0.032},
+ 'stats': {'tasks': 1, 'warnings': 0, 'errors': 1, 'seconds': 0.019},
  'warnings': [],
  'errors': [],
  'tasks': [{'valid': False,
@@ -2360,7 +2360,7 @@ print(report)
                       'rows': 11,
                       'warnings': 0,
                       'errors': 1,
-                      'seconds': 0.032},
+                      'seconds': 0.019},
             'warnings': [],
             'errors': [{'type': 'duplicate-label',
                         'title': 'Duplicate Label',
@@ -2376,12 +2376,156 @@ print(report)
                         'label': 'name',
                         'fieldName': 'name2',
                         'fieldNumber': 3}]}]}</code></pre>
-</div><div><pre><code class="language-python">
+</div><p>Os erros são agrupados por tarefas (ou seja, arquivos de dados); para alguma validação pode haver dezenas de tarefas. Vamos usar a report.flatten função para simplificar a representação dos erros. Esta função ajuda a representar um relatório como uma lista de erros:</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+pprint(report.flatten(["rowNumber", "fieldNumber", "code", "message"]))
+
 </code></pre>
-</div><div><pre><code class="language-python">
+
+<pre><code class="language-markup">[[None,
+  3,
+  None,
+  'Label "name" in the header at position "3" is duplicated to a label: at '
+  'position "2"']]</code></pre>
+</div><p>Em algumas situações, um erro não pode ser associado a uma tarefa; em seguida, ele vai para a propriedade de nível superior report.errors:</p>
+<div><pre><code class="language-python">from frictionless import validate
+
+report = validate("data/bad.schema.yaml", type='schema')
+print(report)
 </code></pre>
-</div><div><pre><code class="language-python">
+
+<pre><code class="language-markup">{'valid': False,
+ 'stats': {'tasks': 0, 'warnings': 0, 'errors': 1, 'seconds': 0.001},
+ 'warnings': [],
+ 'errors': [{'type': 'schema-error',
+             'title': 'Schema Error',
+             'description': 'Provided schema is not valid.',
+             'message': "Schema is not valid: 'badd' is not of type 'array' at "
+                        "property 'fields'",
+             'tags': [],
+             'note': "'badd' is not of type 'array' at property 'fields'"}],
+ 'tasks': []}</code></pre>
+</div><h2>Validation Errors</h2>
+<p>(é possível acessar a chave 'errors' de um relatório de validação. Assim como também é possível acessas as chaves dentro dos valores correspondente a essa chave, como type, title, tags, message, etc. como veremos abaixo)</p>
+<p>O objeto Error está no centro do processo de validação. O Report possui report.errors e report.tasks[].errors, propriedades que podem conter o objeto Error. Vamos explorá-lo dando uma olhada mais profunda no duplicate-label erro:</p>
+<div><pre><code class="language-python">from frictionless import validate
+
+report = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+error = report.error  # this is only available for one table / one error sitution
+print(f'Type: "{error.type}"')
+print(f'Title: "{error.title}"')
+print(f'Tags: "{error.tags}"')
+print(f'Note: "{error.note}"')
+print(f'Message: "{error.message}"')
+print(f'Description: "{error.description}"')
+
 </code></pre>
+
+<pre><code class="language-markup">Type: "duplicate-label"
+Title: "Duplicate Label"
+Tags: "['#table', '#header', '#label']"
+Note: "at position "2""
+Message: "Label "name" in the header at position "3" is duplicated to a label: at position "2""
+Description: "Two columns in the header row have the same value. Column names should be unique."</code></pre>
+</div><div><pre><code class="language-python">
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+error = report.error  # this is only available for one table / one error sitution
+print(error)
+</code></pre>
+
+<pre><code class="language-markup">{'type': 'duplicate-label',
+ 'title': 'Duplicate Label',
+ 'description': 'Two columns in the header row have the same value. Column '
+                'names should be unique.',
+ 'message': 'Label "name" in the header at position "3" is duplicated to a '
+            'label: at position "2"',
+ 'tags': ['#table', '#header', '#label'],
+ 'note': 'at position "2"',
+ 'labels': ['id', 'name', 'name'],
+ 'rowNumbers': [1],
+ 'label': 'name',
+ 'fieldName': 'name2',
+ 'fieldNumber': 3}</code></pre>
+</div><h2>Available Checks (verificações)</h2>
+<p>faz uma validação mais profunda quando o checks ta ativado, utilizando como referência um campo específico. A depender do campo colocado o relatório gerado vai mudar (só usar 'name' no lugar de 'id' que é possível ver isso)</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate, checks
+
+checks = [checks.sequential_value(field_name='id')]
+report = validate('data/capital-invalid.csv', checks=checks)
+pprint(report.flatten(["rowNumber", "fieldNumber", "type", "note"]))
+
+</code></pre>
+
+<pre><code class="language-markup">[[None, 3, 'duplicate-label', 'at position "2"'],
+ [10, 3, 'missing-cell', ''],
+ [10, 1, 'sequential-value', 'the value is not sequential'],
+ [11, None, 'blank-row', ''],
+ [12, 1, 'type-error', 'type is "integer/default"'],
+ [12, 4, 'extra-cell', '']]</code></pre>
+</div><p>Faremos o mesmo código feito acima sem utilizar o checks. Note que o erro na sequência do id presente na task não é detectado.</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+
+report = validate('data/capital-invalid.csv')
+pprint(report.flatten(["rowNumber", "fieldNumber", "type", "note"]))
+
+</code></pre>
+
+<pre><code class="language-markup">[[None, 3, 'duplicate-label', 'at position "2"'],
+ [10, 3, 'missing-cell', ''],
+ [11, None, 'blank-row', ''],
+ [12, 1, 'type-error', 'type is "integer/default"'],
+ [12, 4, 'extra-cell', '']]</code></pre>
+</div><h2>Custom Checks</h2>
+<div><pre><code class="language-python">
+</code></pre>
+</div><h2>Pick/Skip Errors</h2>
+<p>Podemos escolher ou pular erros fornecendo uma lista de códigos de erro. Isso é útil quando você já sabe que seus dados têm alguns erros, mas deseja ignorá-los por enquanto. Por exemplo, se você tiver uma tabela de dados com nomes de cabeçalho repetidos. Vejamos um exemplo de como escolher e pular erros:</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+
+report1 = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+report2 = validate("data/capital-invalid.csv", skip_errors=["duplicate-label"])
+pprint(report1.flatten(["rowNumber", "fieldNumber", "type"]))
+print('')
+pprint(report2.flatten(["rowNumber", "fieldNumber", "type"]))
+</code></pre>
+
+<pre><code class="language-markup">[[None, 3, 'duplicate-label']]
+
+[[10, 3, 'missing-cell'],
+ [11, None, 'blank-row'],
+ [12, 1, 'type-error'],
+ [12, 4, 'extra-cell']]</code></pre>
+</div><p>Também é possível usar tags de erros</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+#escolho o erro e exibo
+report1 = validate("data/capital-invalid.csv", pick_errors=["#header"])
+#ignoro o erro listado e exibo o resto
+report2 = validate("data/capital-invalid.csv", skip_errors=["#row"])
+pprint(report1.flatten(["rowNumber", "fieldNumber", "type"]))
+pprint(report2.flatten(["rowNumber", "fieldNumber", "type"]))
+</code></pre>
+
+<pre><code class="language-markup">[[None, 3, 'duplicate-label']]
+[[None, 3, 'duplicate-label']]</code></pre>
+</div><h2>Limit Errors</h2>
+<p>Essa opção permite limitar a quantidade de erros e pode ser usada quando você precisa fazer uma verificação rápida ou deseja "falhar rápido". Por exemplo, aqui usamos limit_errorspara encontrar apenas o 1º erro e adicioná-lo ao nosso relatório:</p>
+<div><pre><code class="language-python">from pprint import pprint
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", limit_errors=2)
+pprint(report.flatten(["rowNumber", "fieldNumber", "type"]))
+</code></pre>
+
+<pre><code class="language-markup">[[None, 3, 'duplicate-label'], [10, 3, 'missing-cell']]</code></pre>
 </div>
 
 <div id="livemark-signs">
@@ -2787,7 +2931,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Validating Data',
           'path': 'pages/frictionless_v5/Validating_Data',
           'relpath': 'Validating_Data',
-          'text': "# Validating Data A valida\u00e7\u00e3o de dados tabulares \u00e9 um processo de identifica\u00e7\u00e3o de problemas que est\u00e3o nos seus dados para que possamos corrigir. Vamos olhar a seguir um exemplo de arquivo de dados: ```python script with open(\u0027data/capital-invalid.csv\u0027) as file: print(file.read()) ``` o frictionless fornce detalhes de erros abrangentes para que os erros possam ser compreendidos pelo usu\u00e1rio. vamos usar a fun\u00e7\u00e3o de alto n\u00edvel, validate, para validar o arquivo acima. Mas tamb\u00e9m \u00e9 poss\u00edvel validar usando o CLI. ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/capital-invalid.csv\u0027) print(report) ``` ## Validating functions A interface de alto n\u00edvel para validar os dados fornecidos pelo Frictionless \u00e9 um conjunto de fun\u00e7\u00f5es validate. s\u00e3o elas: validate (detecta o tipo de fonte do arquivo e valida os dados de acordo com a fonte) Schema.validate_descriptor, resource.validate, package.validate. Todos os outros validam de acordo com suas classes, execto esse aqui: inquiry.validate ```python script import yaml from frictionless import Schema descriptor = {} descriptor[\u0027fields\u0027] = \u0027badd\u0027 # must be a list with open(\u0027data/bad.schema.yaml\u0027, \u0027w\u0027) as file: yaml.dump(descriptor, file) ``` ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/bad.schema.yaml\u0027) pprint(report) ``` vimos que o esquema \u00e9 inv\u00e1lido e o erro \u00e9 exibido. A valida\u00e7\u00e3o de esquemas \u00e9 \u00fatil quando vc est\u00e1 trabalhando com diferentes classes de tabela e quer criar esquemas para elas. O validate garantir\u00e1 que os metadados sejam v\u00e1lidos ## Validating a Resource Um recurso \u00e9 um container contendo metadados e dados. Precisamos criar um descritor de recurso e ent\u00e3o podemos valid\u00e1-lo. ```python script from frictionless import describe \"\"\" resource = describe(\u0027data/capital-invalid.csv\u0027) resource.path = \"capital-invalid.csv\" resource.to_yaml(\u0027data/capital.resource.yaml\u0027) \"\"\" ``` note que validamos o arquivo capital-invalid.csv antes, agora estamos queremos validar o descritor desse arquivo, nesse caso \u00e9 um yaml (poderia ser um json). Queremos mostrar que garantimos o mesmo resultado usando um recurso que usando um arquivo de dados (exemplo acima) ```python script from frictionless import validate report = validate(\u0027data/capital.resource.yaml\u0027) print(report) ``` por que precisamos usar um descritor de recurso se o resultado \u00e9 o mesmo? O motivo \u00e9 metadados + empacotamento de dados. Ficar\u00e1 mais claro no exemplo abaixo. ```python script from frictionless import describe \"\"\" resource = describe(\u0027data/capital-invalid.csv\u0027) resource.add_defined(\u0027stats\u0027) # TODO: fix and remove this line resource.stats.md5 = \u0027ae23c74693ca2d3f0e38b9ba3570775b\u0027 # this is a made up incorrect resource.stats.bytes = 100 # this is wrong resource.path = \"capital-invalid.csv\" resource.to_yaml(\u0027data/capital.resource-bad.yaml\u0027) \"\"\" ``` ```python script from frictionless import validate report = validate(\u0027data/capital.resource-bad.yaml\u0027) print(report) ``` Como vimos podemos adcionar novos atributos, embora errados e inv\u00e1lidos, mas que s\u00e3o detectados pelo validate. Isso ressalta a import\u00e2ncia de um Data Resource, ou seja, de um descritor na hora de usar a valida\u00e7\u00e3o dos dados. ## Validating a Package Um pacote \u00e9 um conjunto de recursos + metadados adicionais. Para mostrar a valida\u00e7\u00e3o de um pacote, precisamos usar mais um arquivo tabular: ```python script with open(\u0027data/capital-valid.csv\u0027) as file: print(file.read()) ``` Agora vamos descrever e validar um pacote de dados que cont\u00e9m os arquivos de dados que vimos at\u00e9 agora. ```python script from frictionless import describe, validate # create package descriptor package = describe(\"data/capital-*id.csv\") package.get_resource(\u0027capital-invalid\u0027).path = \"capital-invalid.csv\" package.get_resource(\u0027capital-valid\u0027).path = \"capital-valid.csv\" package.to_yaml(\"data/capital.package.yaml\") # validate report = validate(\"data/capital.package.yaml\") print(report) ``` ## Validando uma Consulta ??? ## Validation Report Todas as fun\u00e7\u00f5es validate retornam um Relat\u00f3rio de Valida\u00e7\u00e3o. Este \u00e9 um objeto unificado contendo informa\u00e7\u00f5es sobre uma valida\u00e7\u00e3o: detalhes da fonte, o erro, etc. Vamos explorar um relat\u00f3rio: ```python script from frictionless import validate report = validate(\u0027data/capital-invalid.csv\u0027, pick_errors=[\u0027duplicate-label\u0027]) print(report) ``` ```python script ``` ```python script ``` ```python script ```",
+          'text': "# Validating Data A valida\u00e7\u00e3o de dados tabulares \u00e9 um processo de identifica\u00e7\u00e3o de problemas que est\u00e3o nos seus dados para que possamos corrigir. Vamos olhar a seguir um exemplo de arquivo de dados: ```python script with open(\u0027data/capital-invalid.csv\u0027) as file: print(file.read()) ``` o frictionless fornce detalhes de erros abrangentes para que os erros possam ser compreendidos pelo usu\u00e1rio. vamos usar a fun\u00e7\u00e3o de alto n\u00edvel, validate, para validar o arquivo acima. Mas tamb\u00e9m \u00e9 poss\u00edvel validar usando o CLI. ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/capital-invalid.csv\u0027) print(report) ``` ## Validating functions A interface de alto n\u00edvel para validar os dados fornecidos pelo Frictionless \u00e9 um conjunto de fun\u00e7\u00f5es validate. s\u00e3o elas: validate (detecta o tipo de fonte do arquivo e valida os dados de acordo com a fonte) Schema.validate_descriptor, resource.validate, package.validate. Todos os outros validam de acordo com suas classes, execto esse aqui: inquiry.validate ```python script import yaml from frictionless import Schema descriptor = {} descriptor[\u0027fields\u0027] = \u0027badd\u0027 # must be a list with open(\u0027data/bad.schema.yaml\u0027, \u0027w\u0027) as file: yaml.dump(descriptor, file) ``` ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/bad.schema.yaml\u0027) pprint(report) ``` vimos que o esquema \u00e9 inv\u00e1lido e o erro \u00e9 exibido. A valida\u00e7\u00e3o de esquemas \u00e9 \u00fatil quando vc est\u00e1 trabalhando com diferentes classes de tabela e quer criar esquemas para elas. O validate garantir\u00e1 que os metadados sejam v\u00e1lidos ## Validating a Resource Um recurso \u00e9 um container contendo metadados e dados. Precisamos criar um descritor de recurso e ent\u00e3o podemos valid\u00e1-lo. ```python script from frictionless import describe \"\"\" resource = describe(\u0027data/capital-invalid.csv\u0027) resource.path = \"capital-invalid.csv\" resource.to_yaml(\u0027data/capital.resource.yaml\u0027) \"\"\" ``` note que validamos o arquivo capital-invalid.csv antes, agora estamos queremos validar o descritor desse arquivo, nesse caso \u00e9 um yaml (poderia ser um json). Queremos mostrar que garantimos o mesmo resultado usando um recurso que usando um arquivo de dados (exemplo acima) ```python script from frictionless import validate report = validate(\u0027data/capital.resource.yaml\u0027) print(report) ``` por que precisamos usar um descritor de recurso se o resultado \u00e9 o mesmo? O motivo \u00e9 metadados + empacotamento de dados. Ficar\u00e1 mais claro no exemplo abaixo. ```python script from frictionless import describe \"\"\" resource = describe(\u0027data/capital-invalid.csv\u0027) resource.add_defined(\u0027stats\u0027) # TODO: fix and remove this line resource.stats.md5 = \u0027ae23c74693ca2d3f0e38b9ba3570775b\u0027 # this is a made up incorrect resource.stats.bytes = 100 # this is wrong resource.path = \"capital-invalid.csv\" resource.to_yaml(\u0027data/capital.resource-bad.yaml\u0027) \"\"\" ``` ```python script from frictionless import validate report = validate(\u0027data/capital.resource-bad.yaml\u0027) print(report) ``` Como vimos podemos adcionar novos atributos, embora errados e inv\u00e1lidos, mas que s\u00e3o detectados pelo validate. Isso ressalta a import\u00e2ncia de um Data Resource, ou seja, de um descritor na hora de usar a valida\u00e7\u00e3o dos dados. ## Validating a Package Um pacote \u00e9 um conjunto de recursos + metadados adicionais. Para mostrar a valida\u00e7\u00e3o de um pacote, precisamos usar mais um arquivo tabular: ```python script with open(\u0027data/capital-valid.csv\u0027) as file: print(file.read()) ``` Agora vamos descrever e validar um pacote de dados que cont\u00e9m os arquivos de dados que vimos at\u00e9 agora. ```python script from frictionless import describe, validate # create package descriptor package = describe(\"data/capital-*id.csv\") package.get_resource(\u0027capital-invalid\u0027).path = \"capital-invalid.csv\" package.get_resource(\u0027capital-valid\u0027).path = \"capital-valid.csv\" package.to_yaml(\"data/capital.package.yaml\") # validate report = validate(\"data/capital.package.yaml\") print(report) ``` ## Validando uma Consulta ??? ## Validation Report Todas as fun\u00e7\u00f5es validate retornam um Relat\u00f3rio de Valida\u00e7\u00e3o. Este \u00e9 um objeto unificado contendo informa\u00e7\u00f5es sobre uma valida\u00e7\u00e3o: detalhes da fonte, o erro, etc. Vamos explorar um relat\u00f3rio: ```python script from frictionless import validate report = validate(\u0027data/capital-invalid.csv\u0027, pick_errors=[\u0027duplicate-label\u0027]) print(report) ``` Os erros s\u00e3o agrupados por tarefas (ou seja, arquivos de dados); para alguma valida\u00e7\u00e3o pode haver dezenas de tarefas. Vamos usar a report.flatten fun\u00e7\u00e3o para simplificar a representa\u00e7\u00e3o dos erros. Esta fun\u00e7\u00e3o ajuda a representar um relat\u00f3rio como uma lista de erros: ```python script from pprint import pprint from frictionless import validate report = validate(\"data/capital-invalid.csv\", pick_errors=[\"duplicate-label\"]) pprint(report.flatten([\"rowNumber\", \"fieldNumber\", \"code\", \"message\"])) ``` Em algumas situa\u00e7\u00f5es, um erro n\u00e3o pode ser associado a uma tarefa; em seguida, ele vai para a propriedade de n\u00edvel superior report.errors: ```python script from frictionless import validate report = validate(\"data/bad.schema.yaml\", type=\u0027schema\u0027) print(report) ``` ## Validation Errors (\u00e9 poss\u00edvel acessar a chave \u0027errors\u0027 de um relat\u00f3rio de valida\u00e7\u00e3o. Assim como tamb\u00e9m \u00e9 poss\u00edvel acessas as chaves dentro dos valores correspondente a essa chave, como type, title, tags, message, etc. como veremos abaixo) O objeto Error est\u00e1 no centro do processo de valida\u00e7\u00e3o. O Report possui report.errors e report.tasks[].errors, propriedades que podem conter o objeto Error. Vamos explor\u00e1-lo dando uma olhada mais profunda no duplicate-label erro: ```python script from frictionless import validate report = validate(\"data/capital-invalid.csv\", pick_errors=[\"duplicate-label\"]) error = report.error # this is only available for one table / one error sitution print(f\u0027Type: \"{error.type}\"\u0027) print(f\u0027Title: \"{error.title}\"\u0027) print(f\u0027Tags: \"{error.tags}\"\u0027) print(f\u0027Note: \"{error.note}\"\u0027) print(f\u0027Message: \"{error.message}\"\u0027) print(f\u0027Description: \"{error.description}\"\u0027) ``` ```python script from frictionless import validate report = validate(\"data/capital-invalid.csv\", pick_errors=[\"duplicate-label\"]) error = report.error # this is only available for one table / one error sitution print(error) ``` ## Available Checks (verifica\u00e7\u00f5es) faz uma valida\u00e7\u00e3o mais profunda quando o checks ta ativado, utilizando como refer\u00eancia um campo espec\u00edfico. A depender do campo colocado o relat\u00f3rio gerado vai mudar (s\u00f3 usar \u0027name\u0027 no lugar de \u0027id\u0027 que \u00e9 poss\u00edvel ver isso) ```python script from pprint import pprint from frictionless import validate, checks checks = [checks.sequential_value(field_name=\u0027id\u0027)] report = validate(\u0027data/capital-invalid.csv\u0027, checks=checks) pprint(report.flatten([\"rowNumber\", \"fieldNumber\", \"type\", \"note\"])) ``` Faremos o mesmo c\u00f3digo feito acima sem utilizar o checks. Note que o erro na sequ\u00eancia do id presente na task n\u00e3o \u00e9 detectado. ```python script from pprint import pprint from frictionless import validate report = validate(\u0027data/capital-invalid.csv\u0027) pprint(report.flatten([\"rowNumber\", \"fieldNumber\", \"type\", \"note\"])) ``` ## Custom Checks ```python script ``` ## Pick/Skip Errors Podemos escolher ou pular erros fornecendo uma lista de c\u00f3digos de erro. Isso \u00e9 \u00fatil quando voc\u00ea j\u00e1 sabe que seus dados t\u00eam alguns erros, mas deseja ignor\u00e1-los por enquanto. Por exemplo, se voc\u00ea tiver uma tabela de dados com nomes de cabe\u00e7alho repetidos. Vejamos um exemplo de como escolher e pular erros: ```python script from pprint import pprint from frictionless import validate report1 = validate(\"data/capital-invalid.csv\", pick_errors=[\"duplicate-label\"]) report2 = validate(\"data/capital-invalid.csv\", skip_errors=[\"duplicate-label\"]) pprint(report1.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) print(\u0027\u0027) pprint(report2.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) ``` Tamb\u00e9m \u00e9 poss\u00edvel usar tags de erros ```python script from pprint import pprint from frictionless import validate #escolho o erro e exibo report1 = validate(\"data/capital-invalid.csv\", pick_errors=[\"#header\"]) #ignoro o erro listado e exibo o resto report2 = validate(\"data/capital-invalid.csv\", skip_errors=[\"#row\"]) pprint(report1.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) pprint(report2.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) ``` ## Limit Errors Essa op\u00e7\u00e3o permite limitar a quantidade de erros e pode ser usada quando voc\u00ea precisa fazer uma verifica\u00e7\u00e3o r\u00e1pida ou deseja \"falhar r\u00e1pido\". Por exemplo, aqui usamos limit_errorspara encontrar apenas o 1\u00ba erro e adicion\u00e1-lo ao nosso relat\u00f3rio: ```python script from pprint import pprint from frictionless import validate report = validate(\"data/capital-invalid.csv\", limit_errors=2) pprint(report.flatten([\"rowNumber\", \"fieldNumber\", \"type\"])) ```",
       },
       };
   const searchIndex = lunr(function () {

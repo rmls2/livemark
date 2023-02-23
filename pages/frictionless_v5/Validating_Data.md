@@ -135,14 +135,122 @@ report = validate('data/capital-invalid.csv', pick_errors=['duplicate-label'])
 print(report)
 ```
 
+Os erros são agrupados por tarefas (ou seja, arquivos de dados); para alguma validação pode haver dezenas de tarefas. Vamos usar a report.flatten função para simplificar a representação dos erros. Esta função ajuda a representar um relatório como uma lista de erros:
+
 ```python script
+from pprint import pprint
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+pprint(report.flatten(["rowNumber", "fieldNumber", "code", "message"]))
+
+```
+
+Em algumas situações, um erro não pode ser associado a uma tarefa; em seguida, ele vai para a propriedade de nível superior report.errors:
+
+```python script
+from frictionless import validate
+
+report = validate("data/bad.schema.yaml", type='schema')
+print(report)
+```
+
+## Validation Errors
+
+(é possível acessar a chave 'errors' de um relatório de validação. Assim como também é possível acessas as chaves dentro dos valores correspondente a essa chave, como type, title, tags, message, etc. como veremos abaixo)
+
+O objeto Error está no centro do processo de validação. O Report possui report.errors e report.tasks[].errors, propriedades que podem conter o objeto Error. Vamos explorá-lo dando uma olhada mais profunda no duplicate-label erro:
+
+```python script
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+error = report.error  # this is only available for one table / one error sitution
+print(f'Type: "{error.type}"')
+print(f'Title: "{error.title}"')
+print(f'Tags: "{error.tags}"')
+print(f'Note: "{error.note}"')
+print(f'Message: "{error.message}"')
+print(f'Description: "{error.description}"')
 
 ```
 
 ```python script
 
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+error = report.error  # this is only available for one table / one error sitution
+print(error)
 ```
+
+## Available Checks (verificações)
+
+faz uma validação mais profunda quando o checks ta ativado, utilizando como referência um campo específico. A depender do campo colocado o relatório gerado vai mudar (só usar 'name' no lugar de 'id' que é possível ver isso)
+
+```python script
+from pprint import pprint
+from frictionless import validate, checks
+
+checks = [checks.sequential_value(field_name='id')]
+report = validate('data/capital-invalid.csv', checks=checks)
+pprint(report.flatten(["rowNumber", "fieldNumber", "type", "note"]))
+
+```
+
+Faremos o mesmo código feito acima sem utilizar o checks. Note que o erro na sequência do id presente na task não é detectado.
+
+```python script
+from pprint import pprint
+from frictionless import validate
+
+report = validate('data/capital-invalid.csv')
+pprint(report.flatten(["rowNumber", "fieldNumber", "type", "note"]))
+
+```
+
+## Custom Checks
 
 ```python script
 
+```
+
+## Pick/Skip Errors
+
+Podemos escolher ou pular erros fornecendo uma lista de códigos de erro. Isso é útil quando você já sabe que seus dados têm alguns erros, mas deseja ignorá-los por enquanto. Por exemplo, se você tiver uma tabela de dados com nomes de cabeçalho repetidos. Vejamos um exemplo de como escolher e pular erros:
+
+```python script
+from pprint import pprint
+from frictionless import validate
+
+report1 = validate("data/capital-invalid.csv", pick_errors=["duplicate-label"])
+report2 = validate("data/capital-invalid.csv", skip_errors=["duplicate-label"])
+pprint(report1.flatten(["rowNumber", "fieldNumber", "type"]))
+print('')
+pprint(report2.flatten(["rowNumber", "fieldNumber", "type"]))
+```
+
+Também é possível usar tags de erros
+
+```python script
+from pprint import pprint
+from frictionless import validate
+#escolho o erro e exibo
+report1 = validate("data/capital-invalid.csv", pick_errors=["#header"])
+#ignoro o erro listado e exibo o resto
+report2 = validate("data/capital-invalid.csv", skip_errors=["#row"])
+pprint(report1.flatten(["rowNumber", "fieldNumber", "type"]))
+pprint(report2.flatten(["rowNumber", "fieldNumber", "type"]))
+```
+
+## Limit Errors
+
+Essa opção permite limitar a quantidade de erros e pode ser usada quando você precisa fazer uma verificação rápida ou deseja "falhar rápido". Por exemplo, aqui usamos limit_errorspara encontrar apenas o 1º erro e adicioná-lo ao nosso relatório:
+
+```python script
+from pprint import pprint
+from frictionless import validate
+
+report = validate("data/capital-invalid.csv", limit_errors=2)
+pprint(report.flatten(["rowNumber", "fieldNumber", "type"]))
 ```
