@@ -35,3 +35,4 @@ pages:
         - path: pages/frictionless_v5/Describing_Data
         - path: pages/frictionless_v5/Extracting_Data
         - path: pages/frictionless_v5/Validating_Data
+        - path: pages/frictionless_v5/Transforming_Data

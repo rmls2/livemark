@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="extrair dados nada mais é do que LER dados tabulares de uma fonte.">
-<meta name="keywords" content="extracting,data">
+<meta name="description" content="Vamos escrever nossa primeira transformação. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transformação e recuperando um recurso de destino resultante:">
+<meta name="keywords" content="transforming,data">
 <link rel="icon" href="../../assets/sti.png">
 <title>Robert Miller | livemark project</title>
 <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
@@ -1804,7 +1804,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
             Describing Data
           </a>
         </li>
-                <li class="secondary active">
+                <li class="secondary ">
           <a href="Extracting_Data.html" class="secondary">
             Extracting Data
           </a>
@@ -1814,7 +1814,7 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
             Validating Data
           </a>
         </li>
-                <li class="secondary ">
+                <li class="secondary active">
           <a href="Transforming_Data.html" class="secondary">
             Transforming Data
           </a>
@@ -1826,251 +1826,72 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 </div>
 <div id="livemark-main">
 <div id="livemark-notes">
-      <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Extracting_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-02-23 09:30)
+      <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Transforming_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
+    (2023-02-23 11:49)
 </div>
 
-<h1>Extracting Data</h1>
-<p>extrair dados nada mais é do que LER dados tabulares de uma fonte.</p>
-<h3>funções do Extract</h3>
-<p>extract - detecta o arquivo de origem e extrai os dados tabulares<br>
-resource.extract - retorna uma tabela de dados<br>
-package.extract - retorna um mapa das tabelas de um pacote</p>
-<p>extraindo um recurso de um arquivo descritor:</p>
-<h2>Extraindo um recurso</h2>
+<h1>Transforming Data</h1>
+<h2>Transforming a Resource</h2>
+<p>Vamos escrever nossa primeira transformação. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transformação e recuperando um recurso de destino resultante: </p>
 <div><pre><code class="language-python">
-from frictionless import Resource, extract
+from frictionless import Resource, Pipeline, steps, Schema
 from pprint import pprint
 
-resource = Resource('data/capital-3.csv')
-resource.infer()
-# as an example, in the next line we will append the schema
-resource.schema.missing_values.append('3') # will interpret 3 as a missing value
-resource.path = 'capital-3.csv'
-resource.to_yaml('data/capital.resource-test.yaml') # use resource.to_json for JSON format
-resource.to_json('data/capital.resource-test.json')
+# Define source resource
+source = Resource(path="data/transform.csv")
+#schema = Schema.describe('data/transform.csv')
 
-rows = extract('data/capital.resource-test.yaml')
-pprint(rows)
+# Create a pipeline
+pipeline = Pipeline(steps=[
+    steps.table_normalize(),
+    steps.field_add(name="cars", formula='population*2', descriptor={'type': 'integer'}),
+])
 
-</code></pre>
+# Apply transform pipeline
+target = source.transform(pipeline)
 
-<pre><code class="language-markup">[{'id': 1, 'name': 'London'},
- {'id': 2, 'name': 'Berlin'},
- {'id': None, 'name': 'Paris'},
- {'id': 4, 'name': 'Madrid'},
- {'id': 5, 'name': 'Rome'}]</code></pre>
-</div><div><pre><code class="language-python">from frictionless import Resource
-from pprint import pprint
-
-resource = Resource('data/capital.resource-test.yaml')
-pprint(resource.extract())
+# Print resulting schema and data
+print(target.schema)
+print(target.to_view())
+#não faz parte do código original
+print(source)
 
 </code></pre>
 
-<pre><code class="language-markup">[{'id': 1, 'name': 'London'},
- {'id': 2, 'name': 'Berlin'},
- {'id': None, 'name': 'Paris'},
- {'id': 4, 'name': 'Madrid'},
- {'id': 5, 'name': 'Rome'}]</code></pre>
-</div><p>No exemplo acima usamos o extract em cima do yaml para uma extração que levasse em considerações alterações no arquivo original.</p>
-<h2>Extraindo um Pacote</h2>
-<p>A terceira maneira de extrair informações é de um pacote, que é um conjunto de dois ou mais arquivos, por exemplo, dois arquivos de dados e um arquivo de metadados correspondente.</p>
-<p>No exemplo abaixo forneceremos dois arquivos de dados para o extract que consiguirá indentificar que é um conjunto de dados</p>
-<div><pre><code class="language-python">from pprint import pprint
-from frictionless import extract
+<pre><code class="language-markup">{'fields': [{'name': 'id', 'type': 'integer'},
+            {'name': 'name', 'type': 'string'},
+            {'name': 'population', 'type': 'integer'},
+            {'name': 'cars', 'type': 'integer'}]}
++----+-----------+------------+------+
+| id | name      | population | cars |
++====+===========+============+======+
+|  1 | 'germany' |         83 |  166 |
++----+-----------+------------+------+
+|  2 | 'france'  |         66 |  132 |
++----+-----------+------------+------+
+|  3 | 'spain'   |         47 |   94 |
++----+-----------+------------+------+
 
-data = extract('data/*-3.csv')
-pprint(data)
-
-</code></pre>
-
-<pre><code class="language-markup">{'capital-3': [{'id': 1, 'name': 'London'},
-               {'id': 2, 'name': 'Berlin'},
-               {'id': 3, 'name': 'Paris'},
-               {'id': 4, 'name': 'Madrid'},
-               {'id': 5, 'name': 'Rome'}],
- 'country-3': [{'id': 1, 'capital_id': 1, 'name': 'Britain', 'population': 67},
-               {'id': 2, 'capital_id': 3, 'name': 'France', 'population': 67},
-               {'id': 3, 'capital_id': 2, 'name': 'Germany', 'population': 83},
-               {'id': 4, 'capital_id': 5, 'name': 'Italy', 'population': 60},
-               {'id': 5, 'capital_id': 4, 'name': 'Spain', 'population': 47}]}</code></pre>
-</div><p>outra forma é extrair um pacote de um arquivo descritor yaml:</p>
-<div><pre><code class="language-python">from frictionless import Package
-from pprint import pprint
-
-package = Package('data/country.package.yaml')
-pprint(package.extract())
-
-</code></pre>
-
-<pre><code class="language-markup">{'capital': [{'id': 1, 'name': 'London'},
-             {'id': 2, 'name': 'Berlin'},
-             {'id': 3, 'name': 'Paris'},
-             {'id': 4, 'name': 'Madrid'},
-             {'id': 5, 'name': 'Rome'}],
- 'country': [{'capital_id': 1, 'id': 1, 'name': 'Britain', 'population': 67},
-             {'capital_id': 3, 'id': 2, 'name': 'France', 'population': 67},
-             {'capital_id': 2, 'id': 3, 'name': 'Germany', 'population': 83},
-             {'capital_id': 5, 'id': 4, 'name': 'Italy', 'population': 60},
-             {'capital_id': 4, 'id': 5, 'name': 'Spain', 'population': 47}]}</code></pre>
-</div><div><pre><code class="language-python">
-</code></pre>
-</div><h2>Resource Class</h2>
-<p>A classe Resource fornece metadados de um recurso de dados possui funções de leitura e de fluxo. As funções extract leem linhas na memória; o Resource faz o mesmo mas oferece três opçoes de saída de dados: rows, data, textou bytes.</p>
-<div><pre><code class="language-python">from pprint import pprint
-from frictionless import Resource
-
-resource = Resource('data/country-3.csv')
-pprint(resource.read_bytes())
-
-</code></pre>
-
-<pre><code class="language-markup">(b'id,capital_id,name,population\n1,1,Britain,67\n2,3,France,67\n3,2,Germany,8'
- b'3\n4,5,Italy,60\n5,4,Spain,47\n')</code></pre>
-</div><p>É uma representação textual do conteúdo:</p>
-<div><pre><code class="language-python">from frictionless import Resource
-
-resource = Resource('data/country-3.csv')
-pprint(resource.read_text())
-
-</code></pre>
-
-<pre><code class="language-markup">('id,capital_id,name,population\n'
- '1,1,Britain,67\n'
- '2,3,France,67\n'
- '3,2,Germany,83\n'
- '4,5,Italy,60\n'
- '5,4,Spain,47\n')</code></pre>
-</div><p>para dados tabulares representação bruta do conteúdo tabular:</p>
-<div><pre><code class="language-python">from frictionless import Resource
-
-resource = Resource('data/country-3.csv')
-pprint(resource.read_cells())
-
-</code></pre>
-
-<pre><code class="language-markup">[['id', 'capital_id', 'name', 'population'],
- ['1', '1', 'Britain', '67'],
- ['2', '3', 'France', '67'],
- ['3', '2', 'Germany', '83'],
- ['4', '5', 'Italy', '60'],
- ['5', '4', 'Spain', '47']]</code></pre>
-</div><p>Para dados tabulares, há linhas disponíveis que são listas normalizadas apresentadas como dicionários:</p>
-<div><pre><code class="language-python">from frictionless import Resource
-
-resource = Resource('data/country-3.csv')
-pprint(resource.read_rows())
-
-
-</code></pre>
-
-<pre><code class="language-markup">[{'id': 1, 'capital_id': 1, 'name': 'Britain', 'population': 67},
- {'id': 2, 'capital_id': 3, 'name': 'France', 'population': 67},
- {'id': 3, 'capital_id': 2, 'name': 'Germany', 'population': 83},
- {'id': 4, 'capital_id': 5, 'name': 'Italy', 'population': 60},
- {'id': 5, 'capital_id': 4, 'name': 'Spain', 'population': 47}]</code></pre>
-</div><p>note que o método read_rows do Resource, faz o mesmo que o método extract,</p>
-<p>Para dados tabulares é possível ler somente o cabeçalho</p>
-<div><pre><code class="language-python">from frictionless import Resource
-
-with Resource('data/country-3.csv') as resource:
-    pprint(resource.header)
-</code></pre>
-
-<pre><code class="language-markup">['id', 'capital_id', 'name', 'population']</code></pre>
-</div><h3>Interfaces de transmissão</h3>
-<p>É muito útil ler todos os seus dados na memória, mas nem sempre é possível se um arquivo for muito grande. Para tais casos, o Frictionless fornece funções de streaming:</p>
-<div><pre><code class="language-python">from frictionless import Resource
-
-with Resource('data/country-3.csv') as resource:
-    resource.byte_stream
-    resource.text_stream
-    # resource.list_stream #esse método não existe na classe Resource
-    resource.row_stream
-</code></pre>
-</div><h2>Package Class</h2>
-<p>Essa classe provê funções para ler o conteúdo de um pacote. Criaremos abaixo um descrito de pacote, dessa vez usando json:</p>
-<div><pre><code class="language-python">from frictionless import describe
-
-package = describe('data/*-3.csv')
-package.to_json('data/country.package.json')
-</code></pre>
-</div><p>Podemos criar um pacote a partir de arquivos de dados (usando seus caminhos) e então ler os recursos do pacote:</p>
-<div><pre><code class="language-python">from frictionless import Package
-
-package = Package('data/*-3.csv')
-package.infer(sample=False)
-pprint(package.get_resource('country-3').read_rows())
-pprint(package.get_resource('capital-3').read_rows())
-</code></pre>
-
-<pre><code class="language-markup">[{'id': 1, 'capital_id': 1, 'name': 'Britain', 'population': 67},
- {'id': 2, 'capital_id': 3, 'name': 'France', 'population': 67},
- {'id': 3, 'capital_id': 2, 'name': 'Germany', 'population': 83},
- {'id': 4, 'capital_id': 5, 'name': 'Italy', 'population': 60},
- {'id': 5, 'capital_id': 4, 'name': 'Spain', 'population': 47}]
-[{'id': 1, 'name': 'London'},
- {'id': 2, 'name': 'Berlin'},
- {'id': 3, 'name': 'Paris'},
- {'id': 4, 'name': 'Madrid'},
- {'id': 5, 'name': 'Rome'}]</code></pre>
-</div><p>O pacote por si só não fornece nenhuma função de leitura diretamente porque é apenas um contrainer. Você pode selecionar o recurso de um pacakge e usar a API de recursos acima para leitura de dados.</p>
-<div><pre><code class="language-python">from frictionless import Package
-from pprint import pprint
-"""
-package = Package('data/country.package.yaml')
-pprint(package.describe()) """
-
-</code></pre>
-</div><h2>código teste</h2>
-<div><pre><code class="language-python"># duas formas diferentes de gerar metadados de um data resource
-""" from frictionless import Resource, extract
-from pprint import pprint
-
-resource = Resource('data/capital-3.csv')
-resource.infer()
-pprint(resource)
-
-resource = describe('data/capital-3.csv')
-pprint(resource) """
-</code></pre>
-</div><div><pre><code class="language-python">
-
-
-
-
-
-
-
-""" from pprint import pprint
-from frictionless import extract
-
-rows1 = extract('data/capital-3.yaml')
-pprint(rows1)
-print('')
-rows2 = extract('data/capital-3.csv')
-pprint(rows2) """
-
-""" from frictionless import Resource
-
-resource = Resource('data/capital-3.csv')
-resource.infer()
-resource.to_yaml('data/capital-3.yaml') """
-
-</code></pre>
+{'name': 'transform',
+ 'type': 'table',
+ 'data': [],
+ 'scheme': '',
+ 'format': 'inline',
+ 'mediatype': 'text/csv',
+ 'extrapaths': [],
+ 'schema': {'fields': [{'name': 'id', 'type': 'integer'},
+                       {'name': 'name', 'type': 'string'},
+                       {'name': 'population', 'type': 'integer'},
+                       {'name': 'cars', 'type': 'integer'}]}}</code></pre>
+</div><div><pre><code class="language-python"></code></pre>
+</div><div><pre><code class="language-python"></code></pre>
 </div>
 
 <div id="livemark-signs">
   <div>
-        <div class="next">
-      <a href="Validating_Data.html">
-        Validating Data »
-      </a>
-    </div>
             <div class="prev">
-      <a href="Describing_Data.html">
-        « Describing Data
+      <a href="Validating_Data.html">
+        « Validating Data
       </a>
     </div>
       </div>
@@ -2475,7 +2296,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Transforming Data',
           'path': 'pages/frictionless_v5/Transforming_Data',
           'relpath': 'Transforming_Data',
-          'text': "# Transforming Data ## Transforming a Resource",
+          'text': "# Transforming Data ## Transforming a Resource Vamos escrever nossa primeira transforma\u00e7\u00e3o. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transforma\u00e7\u00e3o e recuperando um recurso de destino resultante: ```python script from frictionless import Resource, Pipeline, steps, Schema from pprint import pprint # Define source resource source = Resource(path=\"data/transform.csv\") #schema = Schema.describe(\u0027data/transform.csv\u0027) # Create a pipeline pipeline = Pipeline(steps=[ steps.table_normalize(), steps.field_add(name=\"cars\", formula=\u0027population*2\u0027, descriptor={\u0027type\u0027: \u0027integer\u0027}), ]) # Apply transform pipeline target = source.transform(pipeline) # Print resulting schema and data print(target.schema) print(target.to_view()) #n\u00e3o faz parte do c\u00f3digo original print(source) ``` ```python script ``` ```python script ```",
       },
       };
   const searchIndex = lunr(function () {
