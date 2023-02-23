@@ -177,7 +177,7 @@ pprint(package.describe()) """
 
 ```python script
 # duas formas diferentes de gerar metadados de um data resource
-from frictionless import Resource, extract
+""" from frictionless import Resource, extract
 from pprint import pprint
 
 resource = Resource('data/capital-3.csv')
@@ -185,7 +185,7 @@ resource.infer()
 pprint(resource)
 
 resource = describe('data/capital-3.csv')
-pprint(resource)
+pprint(resource) """
 ```
 
 ```python script
