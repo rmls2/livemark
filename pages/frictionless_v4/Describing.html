@@ -2267,7 +2267,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Transforming Data',
           'path': 'pages/frictionless_v5/Transforming_Data',
           'relpath': '../frictionless_v5/Transforming_Data',
-          'text': "# Transforming Data ## Transforming a Resource",
+          'text': "# Transforming Data ## Transforming a Resource Vamos escrever nossa primeira transforma\u00e7\u00e3o. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transforma\u00e7\u00e3o e recuperando um recurso de destino resultante: as fun\u00e7\u00f5es transforme s\u00e3o: transform, resource.transform, packagem.transform ```python script from frictionless import Resource, Pipeline, steps, Schema from pprint import pprint # Define source resource source = Resource(path=\"data/transform.csv\") #schema = Schema.describe(\u0027data/transform.csv\u0027) # Create a pipeline pipeline = Pipeline(steps=[ #steps.table_normalize(), steps.field_add(name=\"cars\", formula=\u0027population*2\u0027, descriptor={\u0027type\u0027: \u0027integer\u0027}), ]) # Apply transform pipeline target = source.transform(pipeline) # Print resulting schema and data print(target.schema) print(target.to_view()) #n\u00e3o faz parte do c\u00f3digo original print(source) ``` ```python script ``` ```python script ```",
       },
       };
   const searchIndex = lunr(function () {

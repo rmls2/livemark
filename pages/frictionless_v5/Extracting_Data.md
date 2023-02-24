@@ -213,3 +213,14 @@ resource.infer()
 resource.to_yaml('data/capital-3.yaml') """
 
 ```
+
+```python script
+from frictionless import Resource
+
+with Resource('data/country-3.csv') as resource:
+
+    resource.byte_stream
+    resource.text_stream
+    resource.cell_stream
+    resource.row_stream
+```

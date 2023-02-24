@@ -1827,12 +1827,13 @@ body:not(.with-readability) #livemark-right::-webkit-scrollbar {
 <div id="livemark-main">
 <div id="livemark-notes">
       <a href="https://github.com/rmls2/projeto-web-ic/edit/main/pages/frictionless_v5/Transforming_Data.md" target="_blank">Edit page </a> in <a href="https://livemark.frictionlessdata.io" target="_blank"> Livemark </a><br>
-    (2023-02-23 11:49)
+    (2023-02-24 09:55)
 </div>
 
 <h1>Transforming Data</h1>
 <h2>Transforming a Resource</h2>
 <p>Vamos escrever nossa primeira transformação. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transformação e recuperando um recurso de destino resultante: </p>
+<p>as funções transforme são: transform, resource.transform, packagem.transform</p>
 <div><pre><code class="language-python">
 from frictionless import Resource, Pipeline, steps, Schema
 from pprint import pprint
@@ -1853,6 +1854,7 @@ target = source.transform(pipeline)
 # Print resulting schema and data
 print(target.schema)
 print(target.to_view())
+
 #não faz parte do código original
 print(source)
 
@@ -1883,7 +1885,10 @@ print(source)
                        {'name': 'name', 'type': 'string'},
                        {'name': 'population', 'type': 'integer'},
                        {'name': 'cars', 'type': 'integer'}]}}</code></pre>
-</div><div><pre><code class="language-python"></code></pre>
+</div><p>Vamos detalhar as etapas transformadas que aplicamos:</p>
+<p>steps.table_normalize - lançar tipos de dados e moldar a tabela de acordo com o esquema, inferido ou fornecido
+steps.field_add - adiciona um campo aos dados e metadados com base nas informações fornecidas pelo usuário </p>
+<div><pre><code class="language-python"></code></pre>
 </div><div><pre><code class="language-python"></code></pre>
 </div>
 
@@ -2296,7 +2301,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'name': 'Transforming Data',
           'path': 'pages/frictionless_v5/Transforming_Data',
           'relpath': 'Transforming_Data',
-          'text': "# Transforming Data ## Transforming a Resource Vamos escrever nossa primeira transforma\u00e7\u00e3o. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transforma\u00e7\u00e3o e recuperando um recurso de destino resultante: ```python script from frictionless import Resource, Pipeline, steps, Schema from pprint import pprint # Define source resource source = Resource(path=\"data/transform.csv\") #schema = Schema.describe(\u0027data/transform.csv\u0027) # Create a pipeline pipeline = Pipeline(steps=[ steps.table_normalize(), steps.field_add(name=\"cars\", formula=\u0027population*2\u0027, descriptor={\u0027type\u0027: \u0027integer\u0027}), ]) # Apply transform pipeline target = source.transform(pipeline) # Print resulting schema and data print(target.schema) print(target.to_view()) #n\u00e3o faz parte do c\u00f3digo original print(source) ``` ```python script ``` ```python script ```",
+          'text': "# Transforming Data ## Transforming a Resource Vamos escrever nossa primeira transforma\u00e7\u00e3o. Aqui, transformaremos um arquivo de dados (um recurso) definindo um recurso de origem, aplicando etapas de transforma\u00e7\u00e3o e recuperando um recurso de destino resultante: as fun\u00e7\u00f5es transforme s\u00e3o: transform, resource.transform, packagem.transform ```python script from frictionless import Resource, Pipeline, steps, Schema from pprint import pprint # Define source resource source = Resource(path=\"data/transform.csv\") #schema = Schema.describe(\u0027data/transform.csv\u0027) # Create a pipeline pipeline = Pipeline(steps=[ steps.table_normalize(), steps.field_add(name=\"cars\", formula=\u0027population*2\u0027, descriptor={\u0027type\u0027: \u0027integer\u0027}), ]) # Apply transform pipeline target = source.transform(pipeline) # Print resulting schema and data print(target.schema) print(target.to_view()) #n\u00e3o faz parte do c\u00f3digo original print(source) ``` Vamos detalhar as etapas transformadas que aplicamos: steps.table_normalize - lan\u00e7ar tipos de dados e moldar a tabela de acordo com o esquema, inferido ou fornecido steps.field_add - adiciona um campo aos dados e metadados com base nas informa\u00e7\u00f5es fornecidas pelo usu\u00e1rio ```python script ``` ```python script ```",
       },
       };
   const searchIndex = lunr(function () {
