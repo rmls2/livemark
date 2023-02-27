@@ -35,12 +35,37 @@ print(source)
 
 Vamos detalhar as etapas transformadas que aplicamos:
 
-steps.table_normalize - lançar tipos de dados e moldar a tabela de acordo com o esquema, inferido ou fornecido 
-steps.field_add - adiciona um campo aos dados e metadados com base nas informações fornecidas pelo usuário 
+steps.table_normalize - lançar tipos de dados e moldar a tabela de acordo com o esquema, inferido ou fornecido  
+steps.field_add - adiciona um campo aos dados e metadados com base nas informações fornecidas pelo usuário.
+
+## testeeee
 
 ```python script
+from frictionless import describe, Package
+from pprint import pprint
+
+# package = describe('data/*.csv')
+# package.to_yaml('data/data_package.yaml')
+# pprint(package.get_resource('capital-3'))
+# # print(type(package))
+# package = Package('data/data_package.yaml')
+# print(package.get_resource('capital-3'))
+
+package = Package('data/*.csv')
+package.infer(sample=False)
+pprint(package.get_resource('capital-3').read_rows())
+
+
+# package.to_yaml('data/data_package2.yaml')
+
+# p = Package('data/data_package2.yaml')
+# p.infer()
+# pprint(p)
+# p.to_yaml('data/data_package3.yaml')
 
 ```
 
 ```python script
+
+
 ```

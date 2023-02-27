@@ -1,0 +1,13 @@
+resources:
+  - path: data/capital-3.csv
+  - path: data/capital-invalid.csv
+  - path: data/capital-valid.csv
+  - path: data/cars.csv
+  - path: data/countries-cleaned.csv
+  - path: data/countries.csv
+  - path: data/country-1.csv
+  - path: data/country-2.csv
+  - path: data/country-3.csv
+  - path: data/invalid.csv
+  - path: data/table.csv
+  - path: data/transform.csv

@@ -1,0 +1,190 @@
+resources:
+  - name: capital-3
+    type: table
+    path: data/capital-3.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+  - name: capital-invalid
+    type: table
+    path: data/capital-invalid.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+        - name: name2
+          type: string
+  - name: capital-valid
+    type: table
+    path: data/capital-valid.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+  - name: cars
+    type: table
+    path: data/cars.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: brand
+          type: string
+        - name: model
+          type: string
+        - name: price
+          type: integer
+        - name: kmpl
+          type: number
+        - name: bhp
+          type: integer
+        - name: type
+          type: string
+  - name: countries-cleaned
+    type: table
+    path: data/countries-cleaned.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: neighbor_id
+          type: integer
+        - name: name
+          type: string
+        - name: population
+          type: integer
+  - name: countries
+    type: table
+    path: data/countries.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    dialect:
+      headerRows:
+        - 2
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: neighbor_id
+          type: string
+        - name: name
+          type: string
+        - name: population
+          type: string
+  - name: country-1
+    type: table
+    path: data/country-1.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: neighbor_id
+          type: integer
+        - name: name
+          type: string
+        - name: population
+          type: integer
+  - name: country-2
+    type: table
+    path: data/country-2.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: '# Author: the scientist'
+          type: string
+  - name: country-3
+    type: table
+    path: data/country-3.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: capital_id
+          type: integer
+        - name: name
+          type: string
+        - name: population
+          type: integer
+  - name: invalid
+    type: table
+    path: data/invalid.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+        - name: field3
+          type: integer
+        - name: name2
+          type: integer
+  - name: table
+    type: table
+    path: data/table.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+  - name: transform
+    type: table
+    path: data/transform.csv
+    scheme: file
+    format: csv
+    encoding: utf-8
+    mediatype: text/csv
+    schema:
+      fields:
+        - name: id
+          type: integer
+        - name: name
+          type: string
+        - name: population
+          type: integer
