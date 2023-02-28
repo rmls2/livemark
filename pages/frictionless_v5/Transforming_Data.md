@@ -51,9 +51,10 @@ from pprint import pprint
 # package = Package('data/data_package.yaml')
 # print(package.get_resource('capital-3'))
 
-package = Package('data/*.csv')
-package.infer(sample=False)
-pprint(package.get_resource('capital-3').read_rows())
+# gerando um data package e imṕrimindo somente um dos recursos específicos dele
+# package = Package('data/*.csv')
+# package.infer(sample=False)
+# pprint(package.get_resource('capital-3').read_rows())
 
 
 # package.to_yaml('data/data_package2.yaml')
@@ -62,6 +63,17 @@ pprint(package.get_resource('capital-3').read_rows())
 # p.infer()
 # pprint(p)
 # p.to_yaml('data/data_package3.yaml')
+
+```
+
+```python script
+from frictionless import Resource
+
+with Resource(b'header1,header2\nvalue1,value2.csv', format='csv') as resource:
+  print(resource.format)
+  print(resource.to_view())
+
+
 
 ```
 
