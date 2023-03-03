@@ -77,7 +77,18 @@ with Resource(b'header1,header2\nvalue1,value2.csv', format='csv') as resource:
 
 ```
 
+## Teste código
+
 ```python script
 
+from frictionless.portals import CkanControl
+from frictionless.portals import CkanAdapter
+from frictionless import Package
+# from .control import CkanControl
+
+ckan_control = CkanControl()
+# ckan_adapter = CkanAdapter.read_package('https://dados.ufpe.br')
+
+package = Package('https://legado.dados.gov.br/dataset/bolsa-familia-pagamentos', control=ckan_control)
 
 ```

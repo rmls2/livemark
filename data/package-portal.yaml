@@ -1,0 +1,83 @@
+name: cursos-de-pos-graduacao
+title: Cursos de pós-graduação
+description: "Dados referentes aos cursos de pós-graduação stricto sensu (mestrado\
+  \ e doutorado) e lato sensu (especialização) advindos da Pró-Reitoria de Pós-graduação\
+  \ (PROPG).\r\n\r\nA PROPG tem por finalidade o planejamento, a gestão, a supervisão\
+  \ e a avaliação das políticas de pós-graduação, garantindo a qualidade do ensino\
+  \ de forma articulada com a graduação, a pesquisa e a extensão. É de sua competência,\
+  \ ainda, zelar pela qualidade de sua estrutura acadêmica, dando suporte ao seu corpo\
+  \ técnico, docente e discente, exercendo assim um forte impacto na formação de recursos\
+  \ humanos competente para a atuação diversificada em Ciência, Tecnologia e Inovação.\r\
+  \n\r\n__Dados disponíveis__\r\n\r\nEsse conjunto de dados possui a totalidade dos\
+  \ cursos de pós-graduação stricto sensu (mestrado e doutorado), no entanto apenas\
+  \ uma parcela dos cursos de pós-graduação lato sensu (especialização).\r\n\r\n__Mais\
+  \ informações__\r\n\r\nhttps://www.ufpe.br/propg\r\n"
+homepage: ''
+licenses:
+  - name: cc-zero
+    title: Creative Commons CCZero
+    path: http://www.opendefinition.org/licenses/cc-zero
+contributors:
+  - title: PROPG - Pró-Reitoria de Pós-Graduação
+    role: author
+    email: propg@ufpe.br
+  - title: STI - Superintendência de Tecnologia da Informação
+    role: maintainer
+    email: dadosabertos@ufpe.br
+version: ''
+resources:
+  - name: cursos-pos-graduacao-2022-ufpe-csv
+    description: ''
+    path: https://dados.ufpe.br/dataset/eeab943c-d3d8-4e01-8223-9aa5ad49ce53/resource/8cd3e483-3cab-4948-9bd7-3f7b6786318a/download/cursos-pos-graduacao-2022-ufpe.csv
+    format: csv
+    mediatype: text/csv
+    stats:
+      bytes: 28841
+    hash: ''
+    metadata_modified: '2022-08-23T17:23:50.655399'
+    package_id: eeab943c-d3d8-4e01-8223-9aa5ad49ce53
+    created: '2022-08-23T17:23:50.107248'
+    last_modified: '2022-08-23T17:23:50.039548'
+    url_type: upload
+    id: 8cd3e483-3cab-4948-9bd7-3f7b6786318a
+  - name: cursos-pos-graduacao-2023-ufpe-csv
+    description: ''
+    path: https://dados.ufpe.br/dataset/eeab943c-d3d8-4e01-8223-9aa5ad49ce53/resource/456390c4-68fa-4a29-ade7-25d93c5bd3ba/download/cursos-pos-graduacao-2023-ufpe.csv
+    format: csv
+    mediatype: text/csv
+    stats:
+      bytes: 29126
+    hash: ''
+    metadata_modified: '2023-02-06T12:50:11.556040'
+    package_id: eeab943c-d3d8-4e01-8223-9aa5ad49ce53
+    created: '2023-02-06T12:50:11.564778'
+    last_modified: '2023-02-06T12:50:11.498907'
+    url_type: upload
+    id: 456390c4-68fa-4a29-ade7-25d93c5bd3ba
+relationships_as_object: []
+private: false
+id: eeab943c-d3d8-4e01-8223-9aa5ad49ce53
+metadata_created: '2022-08-23T17:23:13.177494'
+metadata_modified: '2023-02-06T12:50:11.550281'
+creator_user_id: e6fd9a30-b109-4d0f-b600-cea14d0145ad
+type: dataset
+groups:
+  - display_name: Ensino
+    description: 'Conjuntos relativos aos cursos de graduação e pós-graduação, exemplo:
+      plano de curso, acervo da biblioteca, avaliação dos cursos, componentes curriculares,
+      matrículas em componentes.'
+    image_display_url: https://dados.ufpe.br/uploads/group/2022-08-23-151126.910011ensino.png
+    title: Ensino
+    id: bef4f073-9f6c-4e9e-a8b1-b0bd2a56d1af
+    name: ensino
+  - display_name: Institucional
+    description: 'Itens pertinentes a caracterização da universidade, exemplo: unidades
+      acadêmicas, unidades administrativas, organigrama, telefones, quadro de referência,
+      cursos.'
+    image_display_url: https://dados.ufpe.br/uploads/group/2022-08-23-151256.154225ufpe.png
+    title: Institucional
+    id: 8f588250-0371-47fc-acae-f46b31c0082d
+    name: institucional
+relationships_as_subject: []
+owner_org: 60b3dc3f-4793-4f46-a5d4-e529d5b761b3
+Frequência de atualização: Semestral
