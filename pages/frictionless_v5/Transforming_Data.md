@@ -92,3 +92,14 @@ ckan_control = CkanControl()
 package = Package('https://legado.dados.gov.br/dataset/bolsa-familia-pagamentos', control=ckan_control)
 
 ```
+
+```python script
+
+from frictionless import Catalog
+
+catalog = Catalog('https://dados.ufpe.br/dataset/')
+
+print(catalog)
+
+
+```
